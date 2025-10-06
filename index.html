@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orbiteer RMS</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Third-party Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg-color: #191028;
+            --text-primary: #E6E0FF;
+            --text-secondary: #A89FCD;
+            --accent-color: #A020F0; /* Purple Accent */
+            --panel-bg: rgba(45, 30, 70, 0.6);
+            --border-color: rgba(230, 224, 255, 0.1);
+            
+            --risk-low: #00F5D4;
+            --risk-med: #FFD700;
+            --risk-high: #A020F0; /* Purple for high risk */
+            --risk-crit: #FF5555;
+        }
+
+        /* Base Layout */
+        html {
+            background-color: var(--bg-color);
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            background-color: transparent;
+        }
+        
+        .ui-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .panel, header, #sound-toggle, #update-button {
+            pointer-events: auto;
+        }
+        
+        #globe-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        /* Header & Typography */
+        header {
+            text-align: center;
+            padding: 1.5rem 1rem 1rem 1rem;
+            flex-shrink: 0;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 12px var(--accent-color);
+        }
+
+        header #subtitle {
+            margin: 0.5rem 0 0 0;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            height: 1.2em;
+        }
+        
+        .typing-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1em;
+            background-color: var(--accent-color);
+            animation: blink 0.7s infinite;
+            box-shadow: 0 0 8px var(--accent-color);
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            text-shadow: 0 0 8px var(--accent-color);
+        }
+        
+        /* Panels Layout */
+        .main-container {
+            display: flex;
+            gap: 1.5rem;
+            width: 100%;
+            flex-grow: 1;
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .panel {
+            height: 100%;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .left-panel, .right-panel {
+            width: 25%;
+            max-width: 400px;
+        }
+
+        .center-panel {
+            width: 50%;
+            flex-grow: 1;
+        }
+
+        .frosted-glass {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid transparent;
+            box-shadow: 0 0 25px rgba(160, 32, 240, 0.2), inset 0 0 10px rgba(45, 30, 70, 0.5);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        /* Left Panel: Inputs */
+        .input-form-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            overflow-y: auto;
+            padding-top: 1rem;
+            scrollbar-width: none; /* Firefox */
+        }
+        .input-form-content::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+        
+        .input-field .label-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-field label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-field .value-display {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            background-color: var(--bg-color);
+            border-radius: 0.25rem;
+            color: white;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 0.5rem;
+            background: #2d1e46;
+            border-radius: 0.25rem;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 1rem;
+            height: 1rem;
+            background: var(--accent-color);
+            border-radius: 50%;
+            border: 2px solid white;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+        input[type="range"]:hover::-webkit-slider-thumb {
+            box-shadow: 0 0 20px var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        select {
+            width: 100%;
+            background-color: #2d1e46;
+            color: var(--text-primary);
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23E6E0FF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 0.7em top 50%;
+            background-size: 0.65em auto;
+        }
+        
+        /* Right Panel: Results */
+        .results-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            position: relative; /* Для позиционирования спиннера */
+            transition: filter 0.3s ease;
+        }
+
+        .loader {
+            border: 5px solid rgba(230, 224, 255, 0.2);
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -25px;
+            z-index: 20;
+            display: none; /* Скрыт по умолчанию */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .risk-breakdown, .loss-breakdown {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .risk-item, .loss-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0,0,0,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .risk-item-label {
+            text-align: left;
+        }
+
+        .object-count {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .risk-item h4, .loss-item h4 {
+            margin: 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .risk-grade-small {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            min-width: 40px;
+            text-align: center;
+            cursor: help;
+        }
+
+        .loss-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        #total-loss-value { 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            color: white; 
+            letter-spacing: -0.025em; 
+            transition: color 0.5s ease, text-shadow 0.5s ease;
+            margin-top: 1rem;
+        }
+        
+        #insurance-premium-value { 
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--risk-low);
+            margin-top: 1rem;
+        }
+        
+        .grade-A { border: 1px solid var(--risk-low); color: var(--risk-low); }
+        .grade-B { border: 1px solid var(--risk-med); color: var(--risk-med); }
+        .grade-C { border: 1px solid var(--risk-high); color: var(--risk-high); }
+        .grade-F { border: 1px solid var(--risk-crit); color: var(--risk-crit); }
+        
+        /* Controls & Tooltips */
+        #tooltip {
+            position: fixed;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            text-align: left;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            z-index: 1000;
+            width: 250px;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+        
+        .tooltip-icon {
+            margin-left: 0.5rem;
+            color: var(--text-secondary);
+            cursor: help;
+        }
+        
+        .controls-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem; /* More space */
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        .toggle-switch input { display: none; }
+        .toggle-switch label {
+            cursor: pointer;
+            width: 34px;
+            height: 20px;
+            background: #2d1e46;
+            display: block;
+            border-radius: 100px;
+            position: relative;
+        }
+        .toggle-switch label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+        .toggle-switch input:checked + label {
+            background: var(--accent-color);
+        }
+        .toggle-switch input:checked + label:after {
+            left: calc(100% - 2px);
+            transform: translateX(-100%);
+        }
+
+        #update-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(160, 32, 240, 0.5);
+        }
+        #update-button:hover {
+            box-shadow: 0 0 25px rgba(160, 32, 240, 0.8);
+            transform: translateY(-2px);
+        }
+#update-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+        
+        #sound-toggle {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background: none;
+            border: 1px solid var(--text-secondary);
+            color: var(--text-secondary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+        #sound-toggle:hover {
+            color: white;
+            border-color: white;
+        }
+        #sound-toggle.active {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px var(--accent-color);
+        }
+        #sound-toggle svg { display: none; }
+        #sound-toggle.active .sound-on-icon { display: block; }
+        #sound-toggle:not(.active) .sound-off-icon { display: block; }
+        
+        .lang-switcher button {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+        
+        .lang-switcher button.active {
+            color: white;
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div id="globe-container"></div>
+    <div id="tooltip"></div>
+
+    <div class="ui-container">
+        <header>
+            <h1 data-lang-key="title">Orbiteer RMS</h1>
+            <p id="subtitle"></p>
+        </header>
+
+        <div class="main-container">
+            <div class="panel left-panel frosted-glass">
+                <div class="panel-header">
+                    <h2 data-lang-key="mission_params">Параметры Миссии</h2>
+                </div>
+                <div id="input-form" class="input-form-content"></div>
+                <div class="controls-footer">
+                    <div class="toggle-switch">
+                        <span data-lang-key="auto_rotate">Авто-вращение</span>
+                        <input type="checkbox" id="auto-rotate-toggle" checked>
+                        <label for="auto-rotate-toggle"></label>
+                    </div>
+                    <button id="update-button" data-lang-key="update_button">Рассчитать</button>
+                </div>
+            </div>
+            
+            <div class="panel center-panel" style="background: transparent; border: none; box-shadow: none; backdrop-filter: none; pointer-events: none;">
+                <!-- Transparent placeholder -->
+            </div>
+
+            <div class="panel right-panel frosted-glass">
+                <div class="panel-header">
+                    <h2 data-lang-key="financial_results">Финансовые Результаты</h2>
+                    <div class="lang-switcher">
+                        <button id="lang-ru" class="active">RU</button>
+                        <button id="lang-en">EN</button>
+                    </div>
+                </div>
+                <div class="results-content">
+                    <div class="loader"></div>
+                    <div class="risk-breakdown">
+                        <div class="risk-item">
+                            <div class="risk-item-label">
+                                <h4 data-lang-key="launch_risk">Риск при запуске</h4>
+                                <div id="launch-object-count" class="object-count"></div>
+                            </div>
+                            <div id="launch-risk-grade" class="risk-grade-small" data-tooltip-key="tooltip_launch_risk">B</div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-item-label">
+                                <h4 data-lang-key="orbital_risk">Риск на орбите</h4>
+                                <div id="orbital-object-count" class="object-count"></div>
+                            </div>
+                            <div id="orbital-risk-grade" class="risk-grade-small" data-tooltip-key="tooltip_orbital_risk">C+</div>
+                        </div>
+                        <div class="risk-item">
+                             <div class="risk-item-label">
+                                <h4 data-lang-key="reentry_risk">Риск при возвращении</h4>
+                                 <div id="reentry-object-count" class="object-count"></div>
+                            </div>
+                            <div id="reentry-risk-grade" class="risk-grade-small" data-tooltip-key="tooltip_reentry_risk">A-</div>
+                        </div>
+                    </div>
+                    
+                    <div class="loss-section">
+                        <div class="loss-breakdown">
+                             <div class="loss-item">
+                                <h4 data-lang-key="launch_loss">Запуск</h4>
+                                <span id="launch-loss-value" class="loss-value">$0</span>
+                            </div>
+                            <div class="loss-item">
+                                <h4 data-lang-key="orbital_loss">На орбите</h4>
+                                <span id="orbital-loss-value" class="loss-value">$0</span>
+                            </div>
+                            <div class="loss-item">
+                                <h4 data-lang-key="reentry_loss">Возвращение</h4>
+                                <span id="reentry-loss-value" class="loss-value">$0</span>
+                            </div>
+                        </div>
+                         <h3 data-lang-key="expected_loss">Общий Ожидаемый Ущерб</h3>
+                        <p id="total-loss-value">$ 0</p>
+                    </div>
+                    
+                    <div>
+                        <h3 data-lang-key="insurance_premium">Оценочная Страховая Премия</h3>
+                        <p id="insurance-premium-value">$0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="sound-toggle">
+        <svg class="sound-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-1.414 1.414A6.472 6.472 0 0 1 12.026 8a6.472 6.472 0 0 1-1.904 4.606l1.414 1.414zM10.121 12.596A6.48 6.48 0 0 0 12.026 8a6.48 6.48 0 0 0-1.905-4.596l-1.414 1.414A4.486 4.486 0 0 1 10.026 8a4.486 4.486 0 0 1-1.317 3.182l1.414 1.414zM8.707 11.182A4.486 4.486 0 0 0 10.026 8a4.486 4.486 0 0 0-1.317-3.182L7.293 6.232A2.486 2.486 0 0 1 8.026 8a2.486 2.486 0 0 1-.734 1.768l1.414 1.414zM6.343 5.025A2.486 2.486 0 0 0 8.026 8a2.486 2.486 0 0 0-1.683-.975L6.343 5.025zM4.26 3.486l-1.414-1.414L1.432 3.486a.5.5 0 0 0 0 .707L5.05 7.818 1.83 9.872a.5.5 0 0 0 .22.868l2.21.737 1.054 1.76a.5.5 0 0 0 .868.22l2.022-2.83 5.373 5.373a.5.5 0 0 0 .707 0l1.414-1.414L4.26 3.486z"/>
+        </svg>
+        <svg class="sound-on-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.026 8c0 2.088-.84 3.98-2.19 5.303l.708.707z"/>
+            <path d="M10.121 12.596A6.48 6.48 0 0 0 12.026 8a6.48 6.48 0 0 0-1.905-4.596l-.707.707A5.483 5.483 0 0 1 11.026 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
+            <path d="M8.707 11.182A4.486 4.486 0 0 0 10.026 8a4.486 4.486 0 0 0-1.317-3.182l-.707.707A3.486 3.486 0 0 1 9.026 8 3.486 3.486 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.055z"/>
+        </svg>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            
+            let updateTimer = null;
+            let typewriterTimer = null;
+
+            const appState = {
+                params: { 
+                    altitude: 700, 
+                    inclination: 98, 
+                    lan: 45,
+                    cross_section: 10, 
+                    lifespan: 10, 
+                    cost: 250, 
+                    revenue_loss: 50,
+                    launch_site: 0, // Индекс выбранного космодрома
+                    flight_time: 540, // Время полета в секундах
+                },
+                results: {
+                    launch: { grade: 'B', gradeClass: 'grade-B', description: '', object_count: 0 },
+                    orbital: { grade: 'C+', gradeClass: 'grade-C', description: '', object_count: 0 },
+                    reentry: { grade: 'A-', gradeClass: 'grade-A', description: 'Низкий риск, типично для невозвращаемых аппаратов.', object_count: 0 },
+                    financialLoss: { total: 0, launch: 0, orbital: 0, reentry: 0 },
+                    insurancePremium: 0,
+                },
+                lang: 'ru',
+                isAutoRotating: true,
+                isSoundEnabled: false,
+            };
+            
+            // --- SOUND SETUP ---
+            const sounds = {
+                uiSynth: null,
+                ambientPad: null,
+                isInit: false,
+            };
+            
+            const throttledSliderSound = throttle((freq) => {
+                if(appState.isSoundEnabled && sounds.uiSynth) {
+                    sounds.uiSynth.triggerAttackRelease(freq, '16n', Tone.now());
+                }
+            }, 50);
+
+            function initAudio() {
+                if (sounds.isInit || Tone.context.state === 'running') return;
+                Tone.start().then(() => {
+                    sounds.uiSynth = new Tone.Synth({
+                        oscillator: { type: 'sine' },
+                        envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.2 },
+                    }).toDestination();
+                    
+                    sounds.ambientPad = new Tone.NoiseSynth({
+                        noise: { type: 'brown' },
+                        envelope: { attack: 5, decay: 0.1, sustain: 1, release: 5 },
+                    }).toDestination();
+                    sounds.ambientPad.volume.value = -45;
+                    sounds.ambientPad.triggerAttack();
+
+                    sounds.isInit = true;
+                    appState.isSoundEnabled = true;
+                    document.getElementById('sound-toggle').classList.add('active');
+                    sounds.uiSynth.triggerAttackRelease('C4', '8n');
+                }).catch(e => {
+                    console.error("Audio could not be started by browser:", e);
+                });
+            }
+            
+            const translations = {
+                en: {
+                    title: "Orbiteer RMS",
+                    subtitle: "Your intelligent co-pilot for navigating the financial risks of space.",
+                    mission_params: "Mission Parameters",
+                    financial_results: "Financial Results",
+                    altitude: "Altitude",
+                    inclination: "Inclination",
+                    lan: "Azimuth (LAN)",
+                    cross_section: "Cross-section Area",
+                    lifespan: "Mission Lifespan",
+                    cost: "Mission Cost",
+                    revenue_loss: "Revenue Loss",
+                    launch_site: "Launch Site",
+                    flight_time: "Ascent Time",
+                    unit_km: "km",
+                    unit_deg: "°",
+                    unit_m2: "m²",
+                    unit_years: "years",
+                    unit_m_usd: "M$",
+                    unit_percent: "%",
+                    tooltip_altitude: "Specify the average orbit altitude in kilometers. Lower orbits (LEO) typically have a higher density of space debris.",
+                    tooltip_inclination: "The angle of the orbit relative to the Earth's equator.",
+                    tooltip_lan: "Longitude of the Ascending Node. Rotates the orbital plane around the Earth's axis.",
+                    tooltip_cross_section: "The effective area of the satellite in m² that could collide with an object.",
+                    tooltip_lifespan: "The planned duration of the mission in years.",
+                    tooltip_cost: "The total cost of the launch and the spacecraft itself in millions of dollars.",
+                    tooltip_revenue_loss: "The percentage of the total mission cost that will be lost as unearned revenue if the mission fails.",
+                    tooltip_launch_site: "Select the launch site. This determines the initial latitude and longitude for the launch risk calculation.",
+                    tooltip_flight_time: "The duration of the active ascent phase in seconds, during which the spacecraft is most vulnerable.",
+                    launch_risk: "Launch Risk",
+                    orbital_risk: "Orbital Risk",
+                    reentry_risk: "Re-entry Risk",
+                    launch_loss: "Launch",
+                    orbital_loss: "On-Orbit",
+                    reentry_loss: "Re-entry",
+                    expected_loss: "Total Expected Loss",
+                    insurance_premium: "Estimated Insurance Premium",
+                    update_button: "Calculate",
+                    auto_rotate: "Auto-rotate",
+                },
+                ru: {
+                    title: "Orbiteer RMS",
+                    subtitle: "Ваш интеллектуальный помощник для навигации в финансовых рисках космоса.",
+                    mission_params: "Параметры Миссии",
+                    financial_results: "Финансовые Результаты",
+                    altitude: "Высота орбиты",
+                    inclination: "Наклонение",
+                    lan: "Азимут (ДВУ)",
+                    cross_section: "Площадь сечения",
+                    lifespan: "Срок службы",
+                    cost: "Стоимость миссии",
+                    revenue_loss: "Упущенный доход",
+                    launch_site: "Точка старта",
+                    flight_time: "Время полета",
+                    unit_km: "км",
+                    unit_deg: "°",
+                    unit_m2: "м²",
+                    unit_years: "лет",
+                    unit_m_usd: "М$",
+                    unit_percent: "%",
+                    tooltip_altitude: "Укажите среднюю высоту орбиты в километрах. Более низкие орбиты (LEO) обычно имеют большую плотность космического мусора.",
+                    tooltip_inclination: "Градус наклонения орбиты относительно экватора.",
+                    tooltip_lan: "Долгота восходящего узла. Вращает плоскость орбиты вокруг оси Земли.",
+                    tooltip_cross_section: "Эффективная площадь спутника в м², которая может столкнуться с объектом.",
+                    tooltip_lifespan: "Планируемая длительность миссии в годах.",
+                    tooltip_cost: "Общая стоимость запуска и самого аппарата в миллионах долларов.",
+                    tooltip_revenue_loss: "Процент от полной стоимости миссии, который будет потерян в виде недополученной прибыли.",
+                    tooltip_launch_site: "Выберите место запуска. Это определяет начальную широту и долготу для расчета риска при запуске.",
+                    tooltip_flight_time: "Продолжительность активного участка полета в секундах, во время которого аппарат наиболее уязвим.",
+                    unit_seconds: "сек",
+                    launch_risk: "Риск при запуске",
+                    orbital_risk: "Риск на орбите",
+                    reentry_risk: "Риск при возвращении",
+                    launch_loss: "Запуск",
+                    orbital_loss: "На орбите",
+                    reentry_loss: "Возвращение",
+                    expected_loss: "Общий Ожидаемый Ущерб",
+                    insurance_premium: "Оценочная Страховая Премия",
+                    update_button: "Рассчитать",
+                    auto_rotate: "Авто-вращение",
+                }
+            };
+            
+            const fieldsConfig = [
+                { type: 'select', id: 'launch_site', langKey: 'launch_site', tooltipKey: 'tooltip_launch_site' },
+                { type: 'range', id: 'altitude', langKey: 'altitude', min: 300, max: 2000, unitKey: 'unit_km', tooltipKey: 'tooltip_altitude' },
+                { type: 'range', id: 'inclination', langKey: 'inclination', min: 0, max: 180, unitKey: 'unit_deg', tooltipKey: 'tooltip_inclination' },
+                { type: 'range', id: 'lan', langKey: 'lan', min: 0, max: 360, unitKey: 'unit_deg', tooltipKey: 'tooltip_lan' },
+                { type: 'range', id: 'cross_section', langKey: 'cross_section', min: 1, max: 100, unitKey: 'unit_m2', tooltipKey: 'tooltip_cross_section' },
+                { type: 'range', id: 'lifespan', langKey: 'lifespan', min: 1, max: 25, unitKey: 'unit_years', tooltipKey: 'tooltip_lifespan' },
+                { type: 'range', id: 'flight_time', langKey: 'flight_time', min: 300, max: 1200, step: 10, unitKey: 'unit_seconds', tooltipKey: 'tooltip_flight_time' },
+                { type: 'range', id: 'cost', langKey: 'cost', min: 1, max: 1000, unitKey: 'unit_m_usd', tooltipKey: 'tooltip_cost' },
+                { type: 'range', id: 'revenue_loss', langKey: 'revenue_loss', min: 0, max: 100, unitKey: 'unit_percent', tooltipKey: 'tooltip_revenue_loss' },
+            ];
+            
+            const inputForm = document.getElementById('input-form');
+            const tooltipEl = document.getElementById('tooltip');
+            const subtitleEl = document.getElementById('subtitle');
+            const globeContainer = document.getElementById('globe-container');
+            
+            let scene, camera, renderer, earth, clouds, orbitGroup, controls, launchSiteMarker;
+            const earthScale = 0.8; 
+            
+            function animateCameraToTarget(targetPosition) {
+                const startPosition = camera.position.clone();
+                const endPosition = targetPosition.clone().normalize().multiplyScalar(2.5); // Отодвигаемся от цели
+                const duration = 1200; // мс
+                let startTime = null;
+
+                function animate(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const elapsedTime = currentTime - startTime;
+                    const progress = Math.min(elapsedTime / duration, 1);
+
+                    camera.position.lerpVectors(startPosition, endPosition, progress);
+                    camera.lookAt(0, 0, 0); // Всегда смотрим на центр Земли
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                         appState.isAutoRotating = true; // Возобновляем авто-вращение
+                    }
+                }
+                appState.isAutoRotating = false; // Приостанавливаем авто-вращение на время анимации
+                requestAnimationFrame(animate);
+            }
+
+            function updateLaunchSiteMarker(lat, lon) {
+                if (launchSiteMarker) {
+                    scene.remove(launchSiteMarker);
+                }
+
+                // Создаем геометрию ракеты
+                const rocketGroup = new THREE.Group();
+                const bodyGeometry = new THREE.CylinderGeometry(0.005, 0.007, 0.05, 8);
+                const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0xcccccc });
+                const rocketBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
+
+                const noseGeometry = new THREE.ConeGeometry(0.005, 0.02, 8);
+                const noseMaterial = new THREE.MeshPhongMaterial({ color: 0xff4500 });
+                const rocketNose = new THREE.Mesh(noseGeometry, noseMaterial);
+                rocketNose.position.y = 0.035; // Размещаем нос на вершине корпуса
+
+                rocketGroup.add(rocketBody);
+                rocketGroup.add(rocketNose);
+
+                launchSiteMarker = rocketGroup;
+
+                // Размещаем и ориентируем ракету
+                const positionVec = new THREE.Vector3();
+
+                // Преобразуем широту и долготу в сферические координаты Three.js
+                // phi - полярный угол (отклонение от полюса), 90 - широта.
+                const phi = THREE.MathUtils.degToRad(90 - lat);
+                // theta - азимутальный угол. Для стандартной текстуры Земли требуется сдвиг +90 градусов.
+                const theta = THREE.MathUtils.degToRad(lon + 90);
+
+                positionVec.setFromSphericalCoords(earthScale * 1.005, phi, theta);
+                launchSiteMarker.position.copy(positionVec);
+
+                const up = new THREE.Vector3(0, 1, 0);
+                const axis = new THREE.Vector3().copy(positionVec).normalize();
+                launchSiteMarker.quaternion.setFromUnitVectors(up, axis);
+
+                scene.add(launchSiteMarker);
+            }
+
+            function hideTooltip() {
+                tooltipEl.style.visibility = 'hidden';
+                tooltipEl.style.opacity = 0;
+            }
+            
+            function setLanguage(lang) {
+                hideTooltip();
+                appState.lang = lang;
+                
+                document.querySelectorAll('[data-lang-key]').forEach(el => {
+                    const key = el.getAttribute('data-lang-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    }
+                });
+                
+                document.querySelectorAll('.value-display').forEach(el => {
+                    const id = el.id.replace('value-', '');
+                    const field = fieldsConfig.find(f => f.id === id);
+                    if (field) {
+                        el.textContent = `${appState.params[id]} ${translations[lang][field.unitKey]}`;
+                    }
+                });
+
+                typewriterEffect(subtitleEl, translations[lang].subtitle);
+                
+                document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
+                document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+                if(appState.isSoundEnabled && sounds.uiSynth) sounds.uiSynth.triggerAttackRelease('A4', '8n');
+                updateApp(false);
+            }
+            
+            function initGlobe() {
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x000000, 0);
+                globeContainer.appendChild(renderer.domElement);
+                
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.enableZoom = false;
+                controls.enablePan = false;
+                
+                controls.addEventListener('start', () => { appState.isAutoRotating = false; });
+
+                const textureLoader = new THREE.TextureLoader();
+                scene.background = textureLoader.load('https://threejs.org/examples/textures/milkyway.jpg');
+
+                const earthMaterial = new THREE.MeshPhongMaterial({
+                    map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg'),
+                    specularMap: textureLoader.load('https://threejs.org/examples/textures/planets/earth_specular_2048.jpg'),
+                    specular: new THREE.Color('grey'),
+                });
+                earth = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), earthMaterial);
+                earth.scale.set(earthScale, earthScale, earthScale);
+                scene.add(earth);
+
+                const cloudMaterial = new THREE.MeshStandardMaterial({ map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_clouds_1024.png'), transparent: true });
+                clouds = new THREE.Mesh(new THREE.SphereGeometry(1.01, 64, 64), cloudMaterial);
+                clouds.scale.set(earthScale, earthScale, earthScale);
+                scene.add(clouds);
+                
+                const glowMaterial = new THREE.ShaderMaterial({
+                    uniforms: {},
+                    vertexShader: `varying vec3 vNormal; void main() { vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+                    fragmentShader: `varying vec3 vNormal; void main() { float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0); gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0) * intensity; }`,
+                    side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true
+                });
+                const glow = new THREE.Mesh(new THREE.SphereGeometry(1.05, 64, 64), glowMaterial);
+                glow.scale.set(earthScale, earthScale, earthScale);
+                scene.add(glow);
+
+                scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+                const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+                dirLight.position.set(5, 3, 5);
+                scene.add(dirLight);
+                
+                orbitGroup = new THREE.Group();
+                scene.add(orbitGroup);
+                
+                camera.position.z = 2.5;
+                
+                const animate = () => { 
+                    requestAnimationFrame(animate); 
+                    if (appState.isAutoRotating) {
+                        // earth.rotation.y += 0.0005; // Вращение земли остановлено
+                    }
+                    clouds.rotation.y += 0.0001; // Вращаются только облака
+                    controls.update(); 
+                    renderer.render(scene, camera); 
+                };
+                animate();
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            function updateOrbit(altitude, inclination, lan, gradeClass) {
+                while (orbitGroup.children.length > 0) orbitGroup.remove(orbitGroup.children[0]);
+
+                let orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-high'));
+                if (gradeClass === 'grade-A') orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-low'));
+                if (gradeClass === 'grade-B') orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-med'));
+                if (gradeClass === 'grade-F') orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-crit'));
+
+                const orbitRadius = earthScale * (1 + (altitude / 6371) * 0.25);
+                
+                const points = [];
+                const numPoints = 128;
+                for (let i = 0; i <= numPoints; i++) {
+                    const angle = (i / numPoints) * Math.PI * 2;
+                    points.push(new THREE.Vector3(Math.cos(angle) * orbitRadius, Math.sin(angle) * orbitRadius, 0));
+                }
+                const curve = new THREE.CatmullRomCurve3(points);
+                curve.closed = true;
+
+                const tubeGeometry = new THREE.TubeGeometry(curve, 100, 0.012, 8, true); 
+                const tubeMaterial = new THREE.MeshStandardMaterial({ color: orbitColor, emissive: orbitColor, emissiveIntensity: 1.5, side: THREE.DoubleSide, transparent: true, opacity: 0.9 });
+                const orbitTube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+                
+                orbitGroup.rotation.set(THREE.MathUtils.degToRad(inclination), THREE.MathUtils.degToRad(lan), 0, 'YXZ');
+
+                orbitGroup.add(orbitTube);
+            }
+            
+            function parseRiskClass(riskData) {
+                if (!riskData || typeof riskData.risk_class !== 'string') {
+                    return { grade: 'N/A', gradeClass: '', description: 'Нет данных', object_count: 0 };
+                }
+                const riskClass = riskData.risk_class;
+                const grade = riskClass.charAt(0);
+                let gradeClass = '';
+                if (['A', 'B', 'C', 'D', 'E', 'F'].includes(grade)) {
+                    gradeClass = `grade-${grade}`;
+                }
+                return {
+                    grade,
+                    gradeClass,
+                    description: riskData.risk_class_description,
+                    object_count: riskData.object_count,
+                };
+            }
+
+            async function fetchRiskAssessment(params) {
+                const { altitude, cross_section, lifespan, cost, revenue_loss, launch_site, flight_time } = params;
+
+                // Параметры для /api/orbit_risk
+                const orbitParams = {
+                    height: altitude,
+                    A_effective: cross_section,
+                    T_years: lifespan,
+                    C_full: cost * 1000000,
+                    D_lost: cost * 1000000 * (revenue_loss / 100)
+                };
+
+                const selectedSite = appState.launchSites[launch_site];
+
+                // Параметры для /api/takeoff_risk (с динамическими значениями)
+                const takeoffParams = {
+                    lat: selectedSite.lat,
+                    lon: selectedSite.lon,
+                    date: new Date().toISOString().slice(0, 19),
+                    altitude: altitude,
+                    inclination: params.inclination,
+                    A_rocket: cross_section,
+                    T_seconds: flight_time,
+                    C_total_loss: cost * 1000000,
+                };
+
+                const orbitQuery = new URLSearchParams(orbitParams).toString();
+                const takeoffQuery = new URLSearchParams(takeoffParams).toString();
+
+                try {
+                    // Выполняем оба запроса параллельно
+                    const [orbitResponse, takeoffResponse] = await Promise.all([
+                        fetch(`/api/orbit_risk?${orbitQuery}`),
+                        fetch(`/api/takeoff_risk?${takeoffQuery}`)
+                    ]);
+
+                    if (!orbitResponse.ok || !takeoffResponse.ok) {
+                        console.error('API Error: One or more requests failed.');
+                        if (!orbitResponse.ok) console.error('Orbit API Error:', await orbitResponse.json());
+                        if (!takeoffResponse.ok) console.error('Takeoff API Error:', await takeoffResponse.json());
+                        return appState.results;
+                    }
+
+                    const orbitData = await orbitResponse.json();
+                    const takeoffData = await takeoffResponse.json();
+
+                    const orbitalRisk = parseRiskClass(orbitData);
+                    const launchRisk = parseRiskClass(takeoffData);
+                    const reentryRisk = { grade: 'A', gradeClass: 'grade-A', description: 'Низкий риск, типично для невозвращаемых аппаратов.', object_count: 0 }; // Заглушка
+                    const mockReentryLoss = orbitParams.C_full * 0.005; // Заглушка
+
+                    const financialLoss = {
+                        launch: Math.round(takeoffData.financial_risk),
+                        orbital: Math.round(orbitData.financial_risk),
+                        reentry: Math.round(mockReentryLoss),
+                    };
+                    financialLoss.total = financialLoss.launch + financialLoss.orbital + financialLoss.reentry;
+
+                    const totalInsurance = Math.round(takeoffData.insurance_premium + orbitData.insurance_premium);
+
+                    return {
+                        launch: launchRisk,
+                        orbital: orbitalRisk,
+                        reentry: reentryRisk,
+                        financialLoss: financialLoss,
+                        insurancePremium: totalInsurance,
+                    };
+
+                } catch (error) {
+                    console.error('Fetch failed:', error);
+                    return appState.results;
+                }
+            }
+
+            function animateCounter(element, targetValue, duration = 1500) {
+                const start = parseInt(element.textContent.replace(/[$\s,]/g, '')) || 0;
+                let startTime = null;
+                function animation(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const progress = Math.min((currentTime - startTime) / duration, 1);
+                    const currentValue = Math.floor(progress * (targetValue - start) + start);
+                    element.textContent = `$${currentValue.toLocaleString('en-US')}`;
+                    if (progress < 1) requestAnimationFrame(animation);
+                }
+                requestAnimationFrame(animation);
+            }
+
+            function updateRiskDisplays(launch, orbital, reentry) {
+                document.getElementById('launch-risk-grade').textContent = launch.grade;
+                document.getElementById('launch-risk-grade').className = `risk-grade-small ${launch.gradeClass}`;
+                document.getElementById('launch-object-count').textContent = `Объектов: ${launch.object_count}`;
+
+                document.getElementById('orbital-risk-grade').textContent = orbital.grade;
+                document.getElementById('orbital-risk-grade').className = `risk-grade-small ${orbital.gradeClass}`;
+                document.getElementById('orbital-object-count').textContent = `Объектов: ${orbital.object_count}`;
+
+                document.getElementById('reentry-risk-grade').textContent = reentry.grade;
+                document.getElementById('reentry-risk-grade').className = `risk-grade-small ${reentry.gradeClass}`;
+                document.getElementById('reentry-object-count').textContent = `(нет данных)`; // Заглушка
+            }
+
+            function updateFinancialDisplays(financialLoss, insurancePremium, animate = true) {
+                 if (animate) {
+                    animateCounter(document.getElementById('total-loss-value'), financialLoss.total);
+                    animateCounter(document.getElementById('launch-loss-value'), financialLoss.launch);
+                    animateCounter(document.getElementById('orbital-loss-value'), financialLoss.orbital);
+                    animateCounter(document.getElementById('reentry-loss-value'), financialLoss.reentry);
+                    animateCounter(document.getElementById('insurance-premium-value'), insurancePremium);
+                } else {
+                    document.getElementById('total-loss-value').textContent = `$${financialLoss.total.toLocaleString('en-US')}`;
+                    document.getElementById('launch-loss-value').textContent = `$${financialLoss.launch.toLocaleString('en-US')}`;
+                    document.getElementById('orbital-loss-value').textContent = `$${financialLoss.orbital.toLocaleString('en-US')}`;
+                    document.getElementById('reentry-loss-value').textContent = `$${financialLoss.reentry.toLocaleString('en-US')}`;
+                    document.getElementById('insurance-premium-value').textContent = `$${insurancePremium.toLocaleString('en-US')}`;
+                }
+
+                const totalLossValueEl = document.getElementById('total-loss-value');
+                let lossColor = 'var(--text-primary)';
+                if (financialLoss.total > 5000000) lossColor = 'var(--risk-crit)';
+                else if (financialLoss.total > 1000000) lossColor = 'var(--risk-med)';
+                else if (financialLoss.total > 0) lossColor = 'var(--risk-low)';
+                totalLossValueEl.style.color = lossColor;
+            }
+
+            async function updateApp(fetchNewData = true) {
+                const loader = document.querySelector('.loader');
+                const updateButton = document.getElementById('update-button');
+                const resultsContent = document.querySelector('.results-content');
+
+                if (fetchNewData) {
+                    loader.style.display = 'block';
+                    updateButton.disabled = true;
+                    resultsContent.style.filter = 'blur(4px)';
+
+                    try {
+                        appState.results = await fetchRiskAssessment(appState.params);
+                    } finally {
+                        loader.style.display = 'none';
+                        updateButton.disabled = false;
+                        resultsContent.style.filter = 'none';
+                    }
+                }
+
+                const { launch, orbital, reentry, financialLoss, insurancePremium } = appState.results;
+                
+                updateRiskDisplays(launch, orbital, reentry);
+                updateFinancialDisplays(financialLoss, insurancePremium, fetchNewData);
+                updateOrbit(appState.params.altitude, appState.params.inclination, appState.params.lan, orbital.gradeClass);
+            }
+            
+            function throttle(func, limit) {
+                let inThrottle;
+                return function() {
+                    const args = arguments;
+                    const context = this;
+                    if (!inThrottle) {
+                        func.apply(context, args);
+                        inThrottle = true;
+                        setTimeout(() => inThrottle = false, limit);
+                    }
+                }
+            }
+
+            async function populateLaunchSites() {
+                try {
+                    const response = await fetch('/api/launch_sites');
+                    if (!response.ok) throw new Error('Failed to fetch launch sites');
+                    const sites = await response.json();
+                    appState.launchSites = sites; // Сохраняем для последующего использования
+
+                    const selectEl = document.getElementById('launch_site');
+                    selectEl.innerHTML = ''; // Очищаем
+                    sites.forEach((site, index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.textContent = site.name;
+                        if (index === appState.params.launch_site) {
+                            option.selected = true;
+                        }
+                        selectEl.appendChild(option);
+                    });
+
+                    // Устанавливаем маркер для точки по умолчанию
+                    if (sites.length > 0) {
+                        const defaultSite = sites[appState.params.launch_site];
+                        updateLaunchSiteMarker(defaultSite.lat, defaultSite.lon);
+                    }
+                } catch (error) {
+                    console.error("Could not populate launch sites:", error);
+                }
+            }
+
+            function createInputFields() {
+                fieldsConfig.forEach(field => {
+                    const fieldEl = document.createElement('div');
+                    fieldEl.className = 'input-field';
+                    
+                    let inputHtml;
+                    if (field.type === 'select') {
+                        inputHtml = `
+                            <div class="label-header">
+                                <label for="${field.id}">
+                                    <span data-lang-key="${field.langKey}"></span>
+                                    <svg class="tooltip-icon" data-tooltip-key="${field.tooltipKey}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                </label>
+                            </div>
+                            <select id="${field.id}"></select>`;
+                    } else {
+                        inputHtml = `
+                            <div class="label-header">
+                                <label for="${field.id}">
+                                    <span data-lang-key="${field.langKey}"></span>
+                                    <svg class="tooltip-icon" data-tooltip-key="${field.tooltipKey}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+                                </label>
+                                <span class="value-display" id="value-${field.id}"></span>
+                            </div>
+                            <input type="range" id="${field.id}" min="${field.min}" max="${field.max}" value="${appState.params[field.id]}" step="${field.step || 1}">`;
+                    }
+                    fieldEl.innerHTML = inputHtml;
+                    
+                    const input = fieldEl.querySelector('input, select');
+                    input.addEventListener('input', (e) => {
+                        appState.params[field.id] = parseFloat(e.target.value);
+                        if (field.type === 'range') {
+                           fieldEl.querySelector(`#value-${field.id}`).textContent = `${appState.params[field.id]} ${translations[appState.lang][field.unitKey]}`;
+                        }
+                        
+                        throttledSliderSound(200 + Math.random() * 100);
+
+                        if (field.id === 'launch_site') {
+                            const selectedSite = appState.launchSites[e.target.value];
+                            if(selectedSite) {
+                                updateLaunchSiteMarker(selectedSite.lat, selectedSite.lon);
+                                animateCameraToTarget(launchSiteMarker.position);
+                            }
+                        } else if (['altitude', 'inclination', 'lan'].includes(field.id)) {
+                           updateOrbit(appState.params.altitude, appState.params.inclination, appState.params.lan, appState.results.orbital.gradeClass);
+                        }
+                    });
+                    inputForm.appendChild(fieldEl);
+                });
+            }
+            
+            function typewriterEffect(element, text, speed = 50) {
+                clearTimeout(typewriterTimer);
+                let i = 0;
+                element.innerHTML = "";
+                const cursor = document.createElement('span');
+                cursor.className = 'typing-cursor';
+                element.appendChild(cursor);
+                function type() {
+                    if (i < text.length) {
+                        if (cursor.parentNode === element) {
+                           element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+                           i++;
+                           typewriterTimer = setTimeout(type, speed);
+                        }
+                    } else if (cursor.parentNode === element) {
+                        typewriterTimer = setTimeout(() => {
+                           if(cursor.parentNode) cursor.style.animation = 'blink 0.7s infinite';
+                        }, 1000);
+                    }
+                }
+                type();
+            }
+
+            function showTooltip(e) {
+                const target = e.target;
+                const key = target.getAttribute('data-tooltip-key');
+                if (!key) return;
+
+                let tooltipText = '';
+                if (key === 'tooltip_launch_risk') {
+                    tooltipText = appState.results.launch.description;
+                } else if (key === 'tooltip_orbital_risk') {
+                    tooltipText = appState.results.orbital.description;
+                } else if (key === 'tooltip_reentry_risk') {
+                    tooltipText = appState.results.reentry.description;
+                } else {
+                    tooltipText = translations[appState.lang][key];
+                }
+
+                if (!tooltipText) return; // Do not show empty tooltip
+
+                tooltipEl.textContent = tooltipText;
+                tooltipEl.style.visibility = 'visible';
+                tooltipEl.style.opacity = 1;
+                const rect = target.getBoundingClientRect();
+
+                // Position tooltip to the left for risk grades
+                if (target.classList.contains('risk-grade-small')) {
+                    tooltipEl.style.left = `${rect.left - tooltipEl.offsetWidth - 10}px`;
+                    tooltipEl.style.top = `${rect.top + rect.height / 2 - tooltipEl.offsetHeight / 2}px`;
+                } else { // Position to the right for input icons
+                    tooltipEl.style.left = `${rect.right + 10}px`;
+                    tooltipEl.style.top = `${rect.top + rect.height / 2 - tooltipEl.offsetHeight / 2}px`;
+                }
+            }
+
+            document.body.addEventListener('mouseover', e => {
+                if (e.target.hasAttribute('data-tooltip-key')) {
+                    showTooltip(e);
+                }
+            });
+
+            document.body.addEventListener('mouseout', e => {
+                if (e.target.hasAttribute('data-tooltip-key')) {
+                    hideTooltip();
+                }
+            });
+
+            document.getElementById('sound-toggle').addEventListener('click', initAudio);
+            document.getElementById('lang-ru').addEventListener('click', () => setLanguage('ru'));
+            document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+            document.getElementById('update-button').addEventListener('click', () => {
+                if(appState.isSoundEnabled && sounds.uiSynth) sounds.uiSynth.triggerAttackRelease('E5', '8n');
+                clearTimeout(updateTimer);
+                updateApp();
+            });
+            document.getElementById('auto-rotate-toggle').addEventListener('change', e => {
+                if(appState.isSoundEnabled && sounds.uiSynth) sounds.uiSynth.triggerAttackRelease('G4', '8n');
+                appState.isAutoRotating = e.target.checked;
+            });
+            
+            initGlobe();
+            createInputFields();
+            await populateLaunchSites();
+            setLanguage('ru');
+        });
+    </script>
+</body>
+</html>
+
+

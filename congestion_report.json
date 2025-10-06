@@ -1,0 +1,1487 @@
+{
+    "(13.8, 90)": {
+        "count": 1,
+        "avg_inclination": 90.2161,
+        "avg_mean_motion": 13.76225239
+    },
+    "(13.5, 90)": {
+        "count": 1,
+        "avg_inclination": 90.2288,
+        "avg_mean_motion": 13.52873858
+    },
+    "(13.3, 90)": {
+        "count": 1,
+        "avg_inclination": 89.9868,
+        "avg_mean_motion": 13.33573664
+    },
+    "(13.4, 90)": {
+        "count": 1,
+        "avg_inclination": 89.9112,
+        "avg_mean_motion": 13.36220273
+    },
+    "(14.7, 70)": {
+        "count": 1,
+        "avg_inclination": 69.9194,
+        "avg_mean_motion": 14.72402939
+    },
+    "(14.0, 70)": {
+        "count": 2,
+        "avg_inclination": 69.974,
+        "avg_mean_motion": 13.981413055
+    },
+    "(15.6, 70)": {
+        "count": 1,
+        "avg_inclination": 69.9073,
+        "avg_mean_motion": 15.63430526
+    },
+    "(14.4, 88)": {
+        "count": 1,
+        "avg_inclination": 87.6198,
+        "avg_mean_motion": 14.37382766
+    },
+    "(12.5, 102)": {
+        "count": 1,
+        "avg_inclination": 101.9989,
+        "avg_mean_motion": 12.53692092
+    },
+    "(13.8, 50)": {
+        "count": 8,
+        "avg_inclination": 49.978662500000006,
+        "avg_mean_motion": 13.80681435625
+    },
+    "(14.9, 98)": {
+        "count": 139,
+        "avg_inclination": 97.77320647482016,
+        "avg_mean_motion": 14.917817599496404
+    },
+    "(12.4, 50)": {
+        "count": 1,
+        "avg_inclination": 50.0083,
+        "avg_mean_motion": 12.44513576
+    },
+    "(14.3, 99)": {
+        "count": 28,
+        "avg_inclination": 98.66638571428571,
+        "avg_mean_motion": 14.306047360357143
+    },
+    "(15.3, 28)": {
+        "count": 1,
+        "avg_inclination": 28.4693,
+        "avg_mean_motion": 15.2670294
+    },
+    "(14.5, 25)": {
+        "count": 2,
+        "avg_inclination": 24.982799999999997,
+        "avg_mean_motion": 14.45648246
+    },
+    "(13.5, 63)": {
+        "count": 33,
+        "avg_inclination": 63.38844848484848,
+        "avg_mean_motion": 13.454311474242422
+    },
+    "(13.5, 99)": {
+        "count": 1,
+        "avg_inclination": 98.555,
+        "avg_mean_motion": 13.53255926
+    },
+    "(14.3, 70)": {
+        "count": 1,
+        "avg_inclination": 69.9525,
+        "avg_mean_motion": 14.27776407
+    },
+    "(14.5, 45)": {
+        "count": 1,
+        "avg_inclination": 45.0124,
+        "avg_mean_motion": 14.46474196
+    },
+    "(14.4, 108)": {
+        "count": 1,
+        "avg_inclination": 107.9619,
+        "avg_mean_motion": 14.35006458
+    },
+    "(14.2, 108)": {
+        "count": 1,
+        "avg_inclination": 108.0019,
+        "avg_mean_motion": 14.2237645
+    },
+    "(14.2, 99)": {
+        "count": 30,
+        "avg_inclination": 98.74326333333332,
+        "avg_mean_motion": 14.216879196
+    },
+    "(14.4, 45)": {
+        "count": 4,
+        "avg_inclination": 45.0021,
+        "avg_mean_motion": 14.3775486575
+    },
+    "(15.5, 52)": {
+        "count": 12,
+        "avg_inclination": 51.632225,
+        "avg_mean_motion": 15.510253445833333
+    },
+    "(15.1, 70)": {
+        "count": 3,
+        "avg_inclination": 69.94193333333334,
+        "avg_mean_motion": 15.092416726666668
+    },
+    "(14.5, 99)": {
+        "count": 5,
+        "avg_inclination": 98.61071999999999,
+        "avg_mean_motion": 14.499889734000002
+    },
+    "(14.6, 98)": {
+        "count": 58,
+        "avg_inclination": 98.1647637931034,
+        "avg_mean_motion": 14.609084593965518
+    },
+    "(15.5, 97)": {
+        "count": 66,
+        "avg_inclination": 97.38199545454543,
+        "avg_mean_motion": 15.498270148787872
+    },
+    "(14.3, 67)": {
+        "count": 1,
+        "avg_inclination": 67.051,
+        "avg_mean_motion": 14.31796759
+    },
+    "(15.1, 98)": {
+        "count": 211,
+        "avg_inclination": 97.63246255924163,
+        "avg_mean_motion": 15.080831313317535
+    },
+    "(14.9, 74)": {
+        "count": 1,
+        "avg_inclination": 74.0709,
+        "avg_mean_motion": 14.94335582
+    },
+    "(13.7, 100)": {
+        "count": 2,
+        "avg_inclination": 99.66275,
+        "avg_mean_motion": 13.69313636
+    },
+    "(12.6, 83)": {
+        "count": 2,
+        "avg_inclination": 82.54554999999999,
+        "avg_mean_motion": 12.6108368
+    },
+    "(12.4, 82)": {
+        "count": 36,
+        "avg_inclination": 82.4821861111111,
+        "avg_mean_motion": 12.42938689194445
+    },
+    "(14.8, 65)": {
+        "count": 3,
+        "avg_inclination": 64.55553333333333,
+        "avg_mean_motion": 14.810203110000002
+    },
+    "(15.0, 40)": {
+        "count": 1,
+        "avg_inclination": 39.9913,
+        "avg_mean_motion": 15.0145595
+    },
+    "(14.8, 74)": {
+        "count": 1,
+        "avg_inclination": 73.932,
+        "avg_mean_motion": 14.80928014
+    },
+    "(12.5, 82)": {
+        "count": 4,
+        "avg_inclination": 82.47455,
+        "avg_mean_motion": 12.454173274999999
+    },
+    "(14.7, 98)": {
+        "count": 65,
+        "avg_inclination": 98.00174461538467,
+        "avg_mean_motion": 14.711293365538461
+    },
+    "(14.4, 98)": {
+        "count": 21,
+        "avg_inclination": 98.36568095238094,
+        "avg_mean_motion": 14.391139759047618
+    },
+    "(14.1, 99)": {
+        "count": 6,
+        "avg_inclination": 98.87943333333332,
+        "avg_mean_motion": 14.142685095
+    },
+    "(15.3, 98)": {
+        "count": 88,
+        "avg_inclination": 97.62416818181818,
+        "avg_mean_motion": 15.292240771704543
+    },
+    "(14.6, 99)": {
+        "count": 6,
+        "avg_inclination": 98.53505000000001,
+        "avg_mean_motion": 14.58253257
+    },
+    "(13.8, 83)": {
+        "count": 1,
+        "avg_inclination": 82.9562,
+        "avg_mean_motion": 13.76302952
+    },
+    "(15.0, 98)": {
+        "count": 309,
+        "avg_inclination": 97.64306019417474,
+        "avg_mean_motion": 15.00939961530745
+    },
+    "(15.2, 97)": {
+        "count": 325,
+        "avg_inclination": 97.41496830769242,
+        "avg_mean_motion": 15.208593020276918
+    },
+    "(15.4, 21)": {
+        "count": 1,
+        "avg_inclination": 20.5553,
+        "avg_mean_motion": 15.44026915
+    },
+    "(14.8, 98)": {
+        "count": 90,
+        "avg_inclination": 97.91566666666662,
+        "avg_mean_motion": 14.802049572888889
+    },
+    "(13.9, 83)": {
+        "count": 1,
+        "avg_inclination": 82.9483,
+        "avg_mean_motion": 13.87890069
+    },
+    "(15.2, 98)": {
+        "count": 97,
+        "avg_inclination": 97.6246020618557,
+        "avg_mean_motion": 15.201692062783504
+    },
+    "(12.6, 82)": {
+        "count": 1,
+        "avg_inclination": 82.4638,
+        "avg_mean_motion": 12.55588563
+    },
+    "(14.3, 98)": {
+        "count": 5,
+        "avg_inclination": 98.36681999999999,
+        "avg_mean_motion": 14.296481972
+    },
+    "(12.2, 52)": {
+        "count": 1,
+        "avg_inclination": 52.0021,
+        "avg_mean_motion": 12.23461743
+    },
+    "(11.9, 52)": {
+        "count": 1,
+        "avg_inclination": 51.9935,
+        "avg_mean_motion": 11.91652159
+    },
+    "(14.1, 71)": {
+        "count": 1,
+        "avg_inclination": 70.9424,
+        "avg_mean_motion": 14.12901847
+    },
+    "(12.3, 52)": {
+        "count": 1,
+        "avg_inclination": 51.9591,
+        "avg_mean_motion": 12.30378022
+    },
+    "(15.7, 98)": {
+        "count": 41,
+        "avg_inclination": 97.62286341463412,
+        "avg_mean_motion": 15.679667675609757
+    },
+    "(12.4, 83)": {
+        "count": 18,
+        "avg_inclination": 82.5103,
+        "avg_mean_motion": 12.430031744444442
+    },
+    "(15.2, 26)": {
+        "count": 1,
+        "avg_inclination": 25.5821,
+        "avg_mean_motion": 15.21897055
+    },
+    "(14.0, 98)": {
+        "count": 1,
+        "avg_inclination": 98.2245,
+        "avg_mean_motion": 13.99609164
+    },
+    "(14.5, 98)": {
+        "count": 6,
+        "avg_inclination": 98.24563333333333,
+        "avg_mean_motion": 14.507696878333332
+    },
+    "(14.0, 67)": {
+        "count": 10,
+        "avg_inclination": 67.14755,
+        "avg_mean_motion": 13.970782445000001
+    },
+    "(13.1, 100)": {
+        "count": 1,
+        "avg_inclination": 100.2436,
+        "avg_mean_motion": 13.05067998
+    },
+    "(13.2, 100)": {
+        "count": 3,
+        "avg_inclination": 100.18056666666666,
+        "avg_mean_motion": 13.160173823333333
+    },
+    "(14.5, 92)": {
+        "count": 1,
+        "avg_inclination": 92.0215,
+        "avg_mean_motion": 14.519104
+    },
+    "(13.7, 83)": {
+        "count": 1,
+        "avg_inclination": 82.9569,
+        "avg_mean_motion": 13.71640765
+    },
+    "(12.6, 52)": {
+        "count": 25,
+        "avg_inclination": 52.00236400000001,
+        "avg_mean_motion": 12.6227035984
+    },
+    "(14.9, 72)": {
+        "count": 1,
+        "avg_inclination": 71.971,
+        "avg_mean_motion": 14.92092892
+    },
+    "(13.8, 99)": {
+        "count": 2,
+        "avg_inclination": 99.33695,
+        "avg_mean_motion": 13.790672345
+    },
+    "(14.1, 20)": {
+        "count": 2,
+        "avg_inclination": 19.96595,
+        "avg_mean_motion": 14.125630285
+    },
+    "(15.6, 97)": {
+        "count": 25,
+        "avg_inclination": 97.31760799999998,
+        "avg_mean_motion": 15.5971782332
+    },
+    "(12.5, 69)": {
+        "count": 1,
+        "avg_inclination": 69.4934,
+        "avg_mean_motion": 12.54931786
+    },
+    "(13.2, 101)": {
+        "count": 2,
+        "avg_inclination": 100.7439,
+        "avg_mean_motion": 13.169433705
+    },
+    "(15.1, 6)": {
+        "count": 1,
+        "avg_inclination": 6.0252,
+        "avg_mean_motion": 15.05168854
+    },
+    "(12.2, 50)": {
+        "count": 1,
+        "avg_inclination": 49.8346,
+        "avg_mean_motion": 12.2073043
+    },
+    "(15.1, 65)": {
+        "count": 2,
+        "avg_inclination": 64.70840000000001,
+        "avg_mean_motion": 15.11547052
+    },
+    "(15.3, 65)": {
+        "count": 3,
+        "avg_inclination": 64.7214,
+        "avg_mean_motion": 15.283586063333333
+    },
+    "(15.4, 65)": {
+        "count": 2,
+        "avg_inclination": 64.8096,
+        "avg_mean_motion": 15.4222715
+    },
+    "(14.2, 98)": {
+        "count": 4,
+        "avg_inclination": 98.440875,
+        "avg_mean_motion": 14.1980056775
+    },
+    "(13.6, 30)": {
+        "count": 1,
+        "avg_inclination": 29.7195,
+        "avg_mean_motion": 13.55506032
+    },
+    "(15.0, 81)": {
+        "count": 1,
+        "avg_inclination": 80.9437,
+        "avg_mean_motion": 15.04608459
+    },
+    "(15.6, 81)": {
+        "count": 1,
+        "avg_inclination": 80.9601,
+        "avg_mean_motion": 15.58535548
+    },
+    "(14.8, 81)": {
+        "count": 1,
+        "avg_inclination": 80.9933,
+        "avg_mean_motion": 14.79659327
+    },
+    "(14.5, 81)": {
+        "count": 1,
+        "avg_inclination": 81.004,
+        "avg_mean_motion": 14.50192585
+    },
+    "(14.9, 75)": {
+        "count": 2,
+        "avg_inclination": 74.9862,
+        "avg_mean_motion": 14.920007179999999
+    },
+    "(15.1, 97)": {
+        "count": 30,
+        "avg_inclination": 97.44109666666667,
+        "avg_mean_motion": 15.110527082666666
+    },
+    "(15.4, 98)": {
+        "count": 120,
+        "avg_inclination": 97.59505583333338,
+        "avg_mean_motion": 15.39832198875
+    },
+    "(15.3, 88)": {
+        "count": 1,
+        "avg_inclination": 87.7409,
+        "avg_mean_motion": 15.26160673
+    },
+    "(15.4, 87)": {
+        "count": 2,
+        "avg_inclination": 87.3417,
+        "avg_mean_motion": 15.445295065
+    },
+    "(15.0, 120)": {
+        "count": 1,
+        "avg_inclination": 120.4656,
+        "avg_mean_motion": 15.02966596
+    },
+    "(15.1, 120)": {
+        "count": 1,
+        "avg_inclination": 120.495,
+        "avg_mean_motion": 15.09993062
+    },
+    "(15.4, 120)": {
+        "count": 1,
+        "avg_inclination": 120.4892,
+        "avg_mean_motion": 15.35590805
+    },
+    "(15.3, 120)": {
+        "count": 2,
+        "avg_inclination": 120.46695,
+        "avg_mean_motion": 15.31606905
+    },
+    "(15.0, 82)": {
+        "count": 2,
+        "avg_inclination": 82.4141,
+        "avg_mean_motion": 15.01282951
+    },
+    "(14.6, 47)": {
+        "count": 9,
+        "avg_inclination": 47.00141111111111,
+        "avg_mean_motion": 14.584044076666666
+    },
+    "(15.4, 97)": {
+        "count": 128,
+        "avg_inclination": 97.33795468749999,
+        "avg_mean_motion": 15.398968627343756
+    },
+    "(13.6, 83)": {
+        "count": 1,
+        "avg_inclination": 82.5146,
+        "avg_mean_motion": 13.6112403
+    },
+    "(14.8, 6)": {
+        "count": 1,
+        "avg_inclination": 5.996,
+        "avg_mean_motion": 14.8173375
+    },
+    "(14.9, 65)": {
+        "count": 8,
+        "avg_inclination": 64.77436250000001,
+        "avg_mean_motion": 14.90506980625
+    },
+    "(15.0, 65)": {
+        "count": 1,
+        "avg_inclination": 64.7669,
+        "avg_mean_motion": 14.9847767
+    },
+    "(15.4, 15)": {
+        "count": 1,
+        "avg_inclination": 14.982,
+        "avg_mean_motion": 15.38626004
+    },
+    "(15.2, 15)": {
+        "count": 1,
+        "avg_inclination": 14.9812,
+        "avg_mean_motion": 15.20843558
+    },
+    "(15.3, 97)": {
+        "count": 181,
+        "avg_inclination": 97.38010386740329,
+        "avg_mean_motion": 15.299822184475126
+    },
+    "(12.9, 66)": {
+        "count": 1,
+        "avg_inclination": 66.0416,
+        "avg_mean_motion": 12.87628328
+    },
+    "(15.4, 31)": {
+        "count": 1,
+        "avg_inclination": 30.9953,
+        "avg_mean_motion": 15.43180279
+    },
+    "(13.9, 99)": {
+        "count": 2,
+        "avg_inclination": 99.20599999999999,
+        "avg_mean_motion": 13.858960535000001
+    },
+    "(15.7, 97)": {
+        "count": 13,
+        "avg_inclination": 97.34375384615386,
+        "avg_mean_motion": 15.697120951538462
+    },
+    "(15.8, 97)": {
+        "count": 14,
+        "avg_inclination": 97.04005,
+        "avg_mean_motion": 15.790771625714285
+    },
+    "(15.6, 98)": {
+        "count": 33,
+        "avg_inclination": 97.62132424242424,
+        "avg_mean_motion": 15.571209116666665
+    },
+    "(15.4, 35)": {
+        "count": 3,
+        "avg_inclination": 34.9683,
+        "avg_mean_motion": 15.426497816666666
+    },
+    "(15.5, 35)": {
+        "count": 5,
+        "avg_inclination": 34.94226,
+        "avg_mean_motion": 15.463122136
+    },
+    "(15.9, 97)": {
+        "count": 3,
+        "avg_inclination": 97.07563333333333,
+        "avg_mean_motion": 15.876130586666667
+    },
+    "(14.3, 86)": {
+        "count": 68,
+        "avg_inclination": 86.39172058823532,
+        "avg_mean_motion": 14.341008126911765
+    },
+    "(15.2, 43)": {
+        "count": 9,
+        "avg_inclination": 43.02325555555556,
+        "avg_mean_motion": 15.218335136666667
+    },
+    "(14.4, 86)": {
+        "count": 6,
+        "avg_inclination": 86.44774999999998,
+        "avg_mean_motion": 14.425000510000002
+    },
+    "(15.0, 97)": {
+        "count": 23,
+        "avg_inclination": 97.39006086956525,
+        "avg_mean_motion": 14.990465654782609
+    },
+    "(15.0, 0)": {
+        "count": 1,
+        "avg_inclination": 0.0485,
+        "avg_mean_motion": 14.99528587
+    },
+    "(15.0, 35)": {
+        "count": 32,
+        "avg_inclination": 34.99524062499999,
+        "avg_mean_motion": 15.0091124190625
+    },
+    "(15.8, 98)": {
+        "count": 6,
+        "avg_inclination": 97.60148333333332,
+        "avg_mean_motion": 15.805763823333335
+    },
+    "(14.7, 99)": {
+        "count": 2,
+        "avg_inclination": 98.93905,
+        "avg_mean_motion": 14.666259615000001
+    },
+    "(15.4, 89)": {
+        "count": 4,
+        "avg_inclination": 88.98255,
+        "avg_mean_motion": 15.388266680000001
+    },
+    "(15.3, 92)": {
+        "count": 1,
+        "avg_inclination": 91.9985,
+        "avg_mean_motion": 15.28364607
+    },
+    "(15.7, 85)": {
+        "count": 1,
+        "avg_inclination": 85.0106,
+        "avg_mean_motion": 15.70801347
+    },
+    "(13.5, 100)": {
+        "count": 1,
+        "avg_inclination": 99.7908,
+        "avg_mean_motion": 13.50752894
+    },
+    "(14.3, 50)": {
+        "count": 12,
+        "avg_inclination": 50.010600000000004,
+        "avg_mean_motion": 14.283416655833333
+    },
+    "(13.4, 50)": {
+        "count": 8,
+        "avg_inclination": 49.984625,
+        "avg_mean_motion": 13.417468397499999
+    },
+    "(14.7, 87)": {
+        "count": 3,
+        "avg_inclination": 86.60373333333332,
+        "avg_mean_motion": 14.722466383333332
+    },
+    "(14.7, 86)": {
+        "count": 1,
+        "avg_inclination": 86.1496,
+        "avg_mean_motion": 14.72229087
+    },
+    "(13.2, 88)": {
+        "count": 370,
+        "avg_inclination": 87.9131694594595,
+        "avg_mean_motion": 13.186116600378364
+    },
+    "(14.4, 99)": {
+        "count": 2,
+        "avg_inclination": 98.50595,
+        "avg_mean_motion": 14.42297449
+    },
+    "(15.0, 37)": {
+        "count": 3,
+        "avg_inclination": 36.9519,
+        "avg_mean_motion": 15.013677950000002
+    },
+    "(15.2, 45)": {
+        "count": 11,
+        "avg_inclination": 45.00126363636363,
+        "avg_mean_motion": 15.211972960000002
+    },
+    "(15.3, 45)": {
+        "count": 18,
+        "avg_inclination": 44.99345,
+        "avg_mean_motion": 15.296113671666667
+    },
+    "(15.8, 45)": {
+        "count": 1,
+        "avg_inclination": 44.9819,
+        "avg_mean_motion": 15.81361669
+    },
+    "(14.8, 24)": {
+        "count": 1,
+        "avg_inclination": 23.9975,
+        "avg_mean_motion": 14.82637575
+    },
+    "(14.7, 24)": {
+        "count": 1,
+        "avg_inclination": 23.9983,
+        "avg_mean_motion": 14.70873935
+    },
+    "(14.6, 24)": {
+        "count": 1,
+        "avg_inclination": 23.9964,
+        "avg_mean_motion": 14.56441122
+    },
+    "(15.1, 24)": {
+        "count": 1,
+        "avg_inclination": 23.999,
+        "avg_mean_motion": 15.06822278
+    },
+    "(15.0, 24)": {
+        "count": 5,
+        "avg_inclination": 23.998700000000003,
+        "avg_mean_motion": 14.977898328
+    },
+    "(15.5, 98)": {
+        "count": 56,
+        "avg_inclination": 97.60350535714281,
+        "avg_mean_motion": 15.501863803928563
+    },
+    "(15.5, 45)": {
+        "count": 1,
+        "avg_inclination": 45.0067,
+        "avg_mean_motion": 15.48576136
+    },
+    "(15.4, 45)": {
+        "count": 5,
+        "avg_inclination": 44.99298,
+        "avg_mean_motion": 15.399840681999999
+    },
+    "(13.1, 88)": {
+        "count": 278,
+        "avg_inclination": 87.89104532374098,
+        "avg_mean_motion": 13.123873349640292
+    },
+    "(15.1, 53)": {
+        "count": 2135,
+        "avg_inclination": 53.16032894613563,
+        "avg_mean_motion": 15.080145416857151
+    },
+    "(15.8, 53)": {
+        "count": 17,
+        "avg_inclination": 53.09344705882353,
+        "avg_mean_motion": 15.807316105294118
+    },
+    "(15.7, 53)": {
+        "count": 326,
+        "avg_inclination": 53.15630306748469,
+        "avg_mean_motion": 15.697603096226999
+    },
+    "(15.4, 53)": {
+        "count": 366,
+        "avg_inclination": 53.14968032786884,
+        "avg_mean_motion": 15.396689161393455
+    },
+    "(15.3, 53)": {
+        "count": 1272,
+        "avg_inclination": 53.15701171383646,
+        "avg_mean_motion": 15.302437560110068
+    },
+    "(15.6, 53)": {
+        "count": 47,
+        "avg_inclination": 53.12187021276598,
+        "avg_mean_motion": 15.60545801106383
+    },
+    "(15.5, 53)": {
+        "count": 61,
+        "avg_inclination": 53.138391803278694,
+        "avg_mean_motion": 15.492294539180332
+    },
+    "(14.0, 45)": {
+        "count": 21,
+        "avg_inclination": 44.96367142857143,
+        "avg_mean_motion": 13.997352532380955
+    },
+    "(13.6, 89)": {
+        "count": 5,
+        "avg_inclination": 88.94578,
+        "avg_mean_motion": 13.574843014
+    },
+    "(15.6, 37)": {
+        "count": 1,
+        "avg_inclination": 36.938,
+        "avg_mean_motion": 15.61750642
+    },
+    "(15.1, 37)": {
+        "count": 2,
+        "avg_inclination": 36.995549999999994,
+        "avg_mean_motion": 15.075120179999999
+    },
+    "(12.8, 83)": {
+        "count": 1,
+        "avg_inclination": 82.5223,
+        "avg_mean_motion": 12.79744128
+    },
+    "(14.8, 86)": {
+        "count": 2,
+        "avg_inclination": 86.29225,
+        "avg_mean_motion": 14.79438828
+    },
+    "(15.2, 53)": {
+        "count": 29,
+        "avg_inclination": 53.05942413793104,
+        "avg_mean_motion": 15.214085821724135
+    },
+    "(15.9, 53)": {
+        "count": 3,
+        "avg_inclination": 53.10066666666666,
+        "avg_mean_motion": 15.884408903333332
+    },
+    "(14.9, 89)": {
+        "count": 1,
+        "avg_inclination": 88.5067,
+        "avg_mean_motion": 14.89427874
+    },
+    "(13.8, 66)": {
+        "count": 2,
+        "avg_inclination": 65.99685,
+        "avg_mean_motion": 13.833754815
+    },
+    "(15.2, 37)": {
+        "count": 5,
+        "avg_inclination": 36.89696,
+        "avg_mean_motion": 15.200993372
+    },
+    "(12.8, 66)": {
+        "count": 1,
+        "avg_inclination": 66.0414,
+        "avg_mean_motion": 12.80930971
+    },
+    "(13.2, 90)": {
+        "count": 1,
+        "avg_inclination": 90.1102,
+        "avg_mean_motion": 13.16651401
+    },
+    "(13.8, 100)": {
+        "count": 1,
+        "avg_inclination": 99.5375,
+        "avg_mean_motion": 13.77581358
+    },
+    "(15.6, 41)": {
+        "count": 5,
+        "avg_inclination": 41.4641,
+        "avg_mean_motion": 15.60943045
+    },
+    "(15.1, 35)": {
+        "count": 3,
+        "avg_inclination": 34.99966666666666,
+        "avg_mean_motion": 15.081897746666668
+    },
+    "(15.3, 67)": {
+        "count": 1,
+        "avg_inclination": 67.1409,
+        "avg_mean_motion": 15.33830343
+    },
+    "(15.9, 61)": {
+        "count": 1,
+        "avg_inclination": 60.651,
+        "avg_mean_motion": 15.88242055
+    },
+    "(14.8, 96)": {
+        "count": 1,
+        "avg_inclination": 96.0014,
+        "avg_mean_motion": 14.80377344
+    },
+    "(13.3, 88)": {
+        "count": 1,
+        "avg_inclination": 87.8971,
+        "avg_mean_motion": 13.25814506
+    },
+    "(14.1, 45)": {
+        "count": 5,
+        "avg_inclination": 45.00046,
+        "avg_mean_motion": 14.084699912
+    },
+    "(13.9, 89)": {
+        "count": 3,
+        "avg_inclination": 88.9834,
+        "avg_mean_motion": 13.917515886666665
+    },
+    "(13.4, 86)": {
+        "count": 8,
+        "avg_inclination": 86.47156249999998,
+        "avg_mean_motion": 13.39820066
+    },
+    "(14.1, 86)": {
+        "count": 9,
+        "avg_inclination": 86.04063333333335,
+        "avg_mean_motion": 14.120360431111113
+    },
+    "(15.0, 70)": {
+        "count": 583,
+        "avg_inclination": 69.99999605488853,
+        "avg_mean_motion": 14.9834140721784
+    },
+    "(15.5, 70)": {
+        "count": 1,
+        "avg_inclination": 69.9764,
+        "avg_mean_motion": 15.45415485
+    },
+    "(15.8, 70)": {
+        "count": 2,
+        "avg_inclination": 69.97059999999999,
+        "avg_mean_motion": 15.806483865
+    },
+    "(15.2, 35)": {
+        "count": 46,
+        "avg_inclination": 34.996556521739116,
+        "avg_mean_motion": 15.210126492826088
+    },
+    "(15.4, 42)": {
+        "count": 4,
+        "avg_inclination": 42.00135,
+        "avg_mean_motion": 15.37877218
+    },
+    "(15.1, 0)": {
+        "count": 1,
+        "avg_inclination": 0.2291,
+        "avg_mean_motion": 15.06789724
+    },
+    "(15.2, 63)": {
+        "count": 5,
+        "avg_inclination": 63.46898,
+        "avg_mean_motion": 15.183747806
+    },
+    "(13.6, 63)": {
+        "count": 1,
+        "avg_inclination": 63.4615,
+        "avg_mean_motion": 13.56254622
+    },
+    "(13.3, 86)": {
+        "count": 2,
+        "avg_inclination": 86.253,
+        "avg_mean_motion": 13.297271965
+    },
+    "(15.0, 50)": {
+        "count": 12,
+        "avg_inclination": 49.99485000000001,
+        "avg_mean_motion": 14.973964194999999
+    },
+    "(15.3, 35)": {
+        "count": 15,
+        "avg_inclination": 34.996500000000005,
+        "avg_mean_motion": 15.281461810666665
+    },
+    "(15.1, 10)": {
+        "count": 1,
+        "avg_inclination": 9.9953,
+        "avg_mean_motion": 15.10869858
+    },
+    "(15.0, 29)": {
+        "count": 2,
+        "avg_inclination": 28.996450000000003,
+        "avg_mean_motion": 15.02308547
+    },
+    "(14.7, 53)": {
+        "count": 1,
+        "avg_inclination": 53.2358,
+        "avg_mean_motion": 14.66263186
+    },
+    "(14.6, 54)": {
+        "count": 2,
+        "avg_inclination": 53.532,
+        "avg_mean_motion": 14.610760185
+    },
+    "(15.3, 29)": {
+        "count": 1,
+        "avg_inclination": 28.9927,
+        "avg_mean_motion": 15.25540887
+    },
+    "(14.6, 55)": {
+        "count": 2,
+        "avg_inclination": 54.998149999999995,
+        "avg_mean_motion": 14.619782489999999
+    },
+    "(14.3, 60)": {
+        "count": 3,
+        "avg_inclination": 59.9977,
+        "avg_mean_motion": 14.29412052
+    },
+    "(15.3, 36)": {
+        "count": 1,
+        "avg_inclination": 35.9682,
+        "avg_mean_motion": 15.28014287
+    },
+    "(14.0, 78)": {
+        "count": 1,
+        "avg_inclination": 77.6132,
+        "avg_mean_motion": 14.00171232
+    },
+    "(15.0, 43)": {
+        "count": 1286,
+        "avg_inclination": 43.00331213063765,
+        "avg_mean_motion": 15.02534717981338
+    },
+    "(15.1, 139)": {
+        "count": 1,
+        "avg_inclination": 139.3398,
+        "avg_mean_motion": 15.11144205
+    },
+    "(14.9, 87)": {
+        "count": 1,
+        "avg_inclination": 86.903,
+        "avg_mean_motion": 14.87548388
+    },
+    "(15.2, 41)": {
+        "count": 2,
+        "avg_inclination": 40.508250000000004,
+        "avg_mean_motion": 15.194765799999999
+    },
+    "(15.2, 40)": {
+        "count": 1,
+        "avg_inclination": 40.4838,
+        "avg_mean_motion": 15.19481224
+    },
+    "(15.7, 43)": {
+        "count": 339,
+        "avg_inclination": 42.99896696165197,
+        "avg_mean_motion": 15.709191553569337
+    },
+    "(15.3, 43)": {
+        "count": 1389,
+        "avg_inclination": 43.00162167026627,
+        "avg_mean_motion": 15.2760400925054
+    },
+    "(15.3, 70)": {
+        "count": 1,
+        "avg_inclination": 69.9986,
+        "avg_mean_motion": 15.26601017
+    },
+    "(14.0, 99)": {
+        "count": 2,
+        "avg_inclination": 99.01365,
+        "avg_mean_motion": 14.00764293
+    },
+    "(15.1, 44)": {
+        "count": 1,
+        "avg_inclination": 44.1759,
+        "avg_mean_motion": 15.06173772
+    },
+    "(15.8, 43)": {
+        "count": 3,
+        "avg_inclination": 42.9985,
+        "avg_mean_motion": 15.76981567
+    },
+    "(13.8, 81)": {
+        "count": 21,
+        "avg_inclination": 81.1723238095238,
+        "avg_mean_motion": 13.842128888095239
+    },
+    "(13.9, 81)": {
+        "count": 22,
+        "avg_inclination": 81.12143181818182,
+        "avg_mean_motion": 13.85341129409091
+    },
+    "(15.5, 50)": {
+        "count": 1,
+        "avg_inclination": 49.994,
+        "avg_mean_motion": 15.53135184
+    },
+    "(14.9, 10)": {
+        "count": 1,
+        "avg_inclination": 9.8896,
+        "avg_mean_motion": 14.938116
+    },
+    "(15.2, 10)": {
+        "count": 1,
+        "avg_inclination": 9.9915,
+        "avg_mean_motion": 15.1525204
+    },
+    "(15.0, 10)": {
+        "count": 1,
+        "avg_inclination": 9.9884,
+        "avg_mean_motion": 14.96415718
+    },
+    "(15.7, 33)": {
+        "count": 1,
+        "avg_inclination": 32.7288,
+        "avg_mean_motion": 15.65803224
+    },
+    "(15.8, 33)": {
+        "count": 1,
+        "avg_inclination": 32.7201,
+        "avg_mean_motion": 15.7973849
+    },
+    "(15.2, 70)": {
+        "count": 1,
+        "avg_inclination": 69.9958,
+        "avg_mean_motion": 15.15347779
+    },
+    "(13.2, 87)": {
+        "count": 19,
+        "avg_inclination": 86.51506315789474,
+        "avg_mean_motion": 13.243130796315793
+    },
+    "(14.8, 87)": {
+        "count": 2,
+        "avg_inclination": 86.66705,
+        "avg_mean_motion": 14.802452469999999
+    },
+    "(15.4, 41)": {
+        "count": 1,
+        "avg_inclination": 40.9959,
+        "avg_mean_motion": 15.43085454
+    },
+    "(15.1, 41)": {
+        "count": 2,
+        "avg_inclination": 41.069050000000004,
+        "avg_mean_motion": 15.096554205
+    },
+    "(15.6, 33)": {
+        "count": 1,
+        "avg_inclination": 32.73,
+        "avg_mean_motion": 15.64572907
+    },
+    "(15.6, 43)": {
+        "count": 4,
+        "avg_inclination": 42.991375,
+        "avg_mean_motion": 15.594978625
+    },
+    "(15.3, 49)": {
+        "count": 1,
+        "avg_inclination": 49.1095,
+        "avg_mean_motion": 15.3014232
+    },
+    "(15.1, 43)": {
+        "count": 4,
+        "avg_inclination": 43.001324999999994,
+        "avg_mean_motion": 15.1025151875
+    },
+    "(15.5, 43)": {
+        "count": 4,
+        "avg_inclination": 42.99265,
+        "avg_mean_motion": 15.481021125
+    },
+    "(15.4, 43)": {
+        "count": 2,
+        "avg_inclination": 42.995149999999995,
+        "avg_mean_motion": 15.4220927
+    },
+    "(15.0, 99)": {
+        "count": 3,
+        "avg_inclination": 99.48936666666667,
+        "avg_mean_motion": 15.047628483333334
+    },
+    "(15.1, 99)": {
+        "count": 1,
+        "avg_inclination": 99.4884,
+        "avg_mean_motion": 15.07877167
+    },
+    "(15.4, 99)": {
+        "count": 1,
+        "avg_inclination": 99.4604,
+        "avg_mean_motion": 15.38012241
+    },
+    "(15.3, 99)": {
+        "count": 1,
+        "avg_inclination": 99.4452,
+        "avg_mean_motion": 15.25358884
+    },
+    "(14.6, 45)": {
+        "count": 5,
+        "avg_inclination": 45.00056,
+        "avg_mean_motion": 14.615763428000003
+    },
+    "(14.8, 53)": {
+        "count": 1,
+        "avg_inclination": 53.0072,
+        "avg_mean_motion": 14.79012225
+    },
+    "(14.0, 81)": {
+        "count": 1,
+        "avg_inclination": 80.9966,
+        "avg_mean_motion": 13.96826972
+    },
+    "(14.2, 50)": {
+        "count": 8,
+        "avg_inclination": 49.98465,
+        "avg_mean_motion": 14.237590654999998
+    },
+    "(15.1, 31)": {
+        "count": 1,
+        "avg_inclination": 31.0017,
+        "avg_mean_motion": 15.09248874
+    },
+    "(14.8, 47)": {
+        "count": 1,
+        "avg_inclination": 46.9806,
+        "avg_mean_motion": 14.79564888
+    },
+    "(15.1, 42)": {
+        "count": 1,
+        "avg_inclination": 42.0132,
+        "avg_mean_motion": 15.14868279
+    },
+    "(15.2, 50)": {
+        "count": 1,
+        "avg_inclination": 49.993,
+        "avg_mean_motion": 15.15587414
+    },
+    "(15.1, 50)": {
+        "count": 4,
+        "avg_inclination": 49.964725,
+        "avg_mean_motion": 15.133118085
+    },
+    "(14.4, 65)": {
+        "count": 1,
+        "avg_inclination": 64.512,
+        "avg_mean_motion": 14.42567835
+    },
+    "(14.4, 59)": {
+        "count": 3,
+        "avg_inclination": 58.68953333333334,
+        "avg_mean_motion": 14.396273950000001
+    },
+    "(14.9, 50)": {
+        "count": 50,
+        "avg_inclination": 49.98938600000001,
+        "avg_mean_motion": 14.891175902199997
+    },
+    "(13.7, 40)": {
+        "count": 5,
+        "avg_inclination": 39.989760000000004,
+        "avg_mean_motion": 13.703649562
+    },
+    "(14.4, 40)": {
+        "count": 1,
+        "avg_inclination": 39.9877,
+        "avg_mean_motion": 14.39375144
+    },
+    "(14.9, 95)": {
+        "count": 4,
+        "avg_inclination": 95.38787500000001,
+        "avg_mean_motion": 14.90476975
+    },
+    "(14.5, 89)": {
+        "count": 1,
+        "avg_inclination": 88.9875,
+        "avg_mean_motion": 14.45828956
+    },
+    "(15.4, 50)": {
+        "count": 1,
+        "avg_inclination": 49.9867,
+        "avg_mean_motion": 15.40764283
+    },
+    "(15.3, 50)": {
+        "count": 2,
+        "avg_inclination": 49.9931,
+        "avg_mean_motion": 15.345832145
+    },
+    "(15.3, 46)": {
+        "count": 1,
+        "avg_inclination": 45.6162,
+        "avg_mean_motion": 15.27938255
+    },
+    "(15.0, 46)": {
+        "count": 9,
+        "avg_inclination": 45.60671111111111,
+        "avg_mean_motion": 14.99609243777778
+    },
+    "(15.0, 45)": {
+        "count": 4,
+        "avg_inclination": 45.405525,
+        "avg_mean_motion": 14.9874445575
+    },
+    "(13.8, 97)": {
+        "count": 1,
+        "avg_inclination": 97.3814,
+        "avg_mean_motion": 13.81783096
+    },
+    "(14.8, 29)": {
+        "count": 2,
+        "avg_inclination": 28.99625,
+        "avg_mean_motion": 14.83108047
+    },
+    "(15.0, 62)": {
+        "count": 2,
+        "avg_inclination": 61.994249999999994,
+        "avg_mean_motion": 15.02393281
+    },
+    "(15.1, 62)": {
+        "count": 3,
+        "avg_inclination": 61.9872,
+        "avg_mean_motion": 15.068994216666667
+    },
+    "(13.5, 89)": {
+        "count": 70,
+        "avg_inclination": 88.98218000000001,
+        "avg_mean_motion": 13.509551406714287
+    },
+    "(14.3, 89)": {
+        "count": 5,
+        "avg_inclination": 88.98022,
+        "avg_mean_motion": 14.271283696000001
+    },
+    "(14.9, 53)": {
+        "count": 1,
+        "avg_inclination": 53.0051,
+        "avg_mean_motion": 14.87657623
+    },
+    "(15.4, 37)": {
+        "count": 1,
+        "avg_inclination": 37.3802,
+        "avg_mean_motion": 15.41509487
+    },
+    "(15.1, 64)": {
+        "count": 2,
+        "avg_inclination": 64.07634999999999,
+        "avg_mean_motion": 15.10128323
+    },
+    "(14.1, 89)": {
+        "count": 3,
+        "avg_inclination": 88.97526666666666,
+        "avg_mean_motion": 14.095756616666668
+    },
+    "(14.2, 89)": {
+        "count": 4,
+        "avg_inclination": 88.979,
+        "avg_mean_motion": 14.2166752475
+    },
+    "(13.8, 89)": {
+        "count": 1,
+        "avg_inclination": 88.9747,
+        "avg_mean_motion": 13.77754098
+    },
+    "(14.0, 89)": {
+        "count": 3,
+        "avg_inclination": 88.97543333333334,
+        "avg_mean_motion": 13.98245225
+    },
+    "(14.9, 97)": {
+        "count": 4,
+        "avg_inclination": 97.344225,
+        "avg_mean_motion": 14.940194465
+    },
+    "(13.6, 50)": {
+        "count": 1,
+        "avg_inclination": 50.0042,
+        "avg_mean_motion": 13.60134111
+    },
+    "(13.8, 60)": {
+        "count": 5,
+        "avg_inclination": 59.915380000000006,
+        "avg_mean_motion": 13.751567558
+    },
+    "(13.2, 86)": {
+        "count": 22,
+        "avg_inclination": 86.49412272727272,
+        "avg_mean_motion": 13.244204558181819
+    },
+    "(15.1, 45)": {
+        "count": 3,
+        "avg_inclination": 44.99626666666666,
+        "avg_mean_motion": 15.110341226666668
+    },
+    "(15.4, 55)": {
+        "count": 5,
+        "avg_inclination": 54.99428,
+        "avg_mean_motion": 15.400746532
+    },
+    "(14.5, 55)": {
+        "count": 10,
+        "avg_inclination": 54.9807,
+        "avg_mean_motion": 14.479681302999998
+    },
+    "(14.4, 97)": {
+        "count": 1,
+        "avg_inclination": 97.4748,
+        "avg_mean_motion": 14.42089008
+    },
+    "(14.9, 82)": {
+        "count": 3,
+        "avg_inclination": 81.99906666666666,
+        "avg_mean_motion": 14.939709103333334
+    },
+    "(13.3, 50)": {
+        "count": 9,
+        "avg_inclination": 50.00298888888889,
+        "avg_mean_motion": 13.293321041111112
+    },
+    "(15.4, 59)": {
+        "count": 1,
+        "avg_inclination": 58.9998,
+        "avg_mean_motion": 15.38557381
+    },
+    "(15.0, 42)": {
+        "count": 4,
+        "avg_inclination": 42.011449999999996,
+        "avg_mean_motion": 14.98416189
+    },
+    "(15.8, 55)": {
+        "count": 1,
+        "avg_inclination": 54.9802,
+        "avg_mean_motion": 15.84095411
+    },
+    "(14.8, 43)": {
+        "count": 1,
+        "avg_inclination": 43.0042,
+        "avg_mean_motion": 14.84030337
+    },
+    "(13.6, 100)": {
+        "count": 6,
+        "avg_inclination": 99.69513333333335,
+        "avg_mean_motion": 13.572167303333336
+    },
+    "(15.0, 52)": {
+        "count": 8,
+        "avg_inclination": 51.89297500000001,
+        "avg_mean_motion": 15.00256325
+    },
+    "(14.8, 52)": {
+        "count": 41,
+        "avg_inclination": 51.899258536585364,
+        "avg_mean_motion": 14.800036126585363
+    },
+    "(15.1, 52)": {
+        "count": 10,
+        "avg_inclination": 51.89027,
+        "avg_mean_motion": 15.105122531000001
+    },
+    "(14.9, 52)": {
+        "count": 5,
+        "avg_inclination": 51.900279999999995,
+        "avg_mean_motion": 14.894857746000003
+    },
+    "(15.2, 52)": {
+        "count": 11,
+        "avg_inclination": 51.88396363636364,
+        "avg_mean_motion": 15.20201848
+    },
+    "(15.3, 52)": {
+        "count": 11,
+        "avg_inclination": 51.87743636363635,
+        "avg_mean_motion": 15.298737889090908
+    },
+    "(15.4, 70)": {
+        "count": 28,
+        "avg_inclination": 70.00173928571431,
+        "avg_mean_motion": 15.427218176785711
+    },
+    "(15.3, 73)": {
+        "count": 1,
+        "avg_inclination": 72.9711,
+        "avg_mean_motion": 15.29805211
+    },
+    "(15.3, 59)": {
+        "count": 1,
+        "avg_inclination": 58.9941,
+        "avg_mean_motion": 15.34044047
+    },
+    "(15.6, 52)": {
+        "count": 2,
+        "avg_inclination": 51.7522,
+        "avg_mean_motion": 15.577540745
+    },
+    "(14.7, 96)": {
+        "count": 1,
+        "avg_inclination": 95.9803,
+        "avg_mean_motion": 14.71833597
+    },
+    "(14.3, 11)": {
+        "count": 2,
+        "avg_inclination": 10.99765,
+        "avg_mean_motion": 14.291805095
+    },
+    "(15.4, 52)": {
+        "count": 15,
+        "avg_inclination": 51.87518666666667,
+        "avg_mean_motion": 15.371072362666668
+    },
+    "(13.7, 50)": {
+        "count": 3,
+        "avg_inclination": 50.001933333333334,
+        "avg_mean_motion": 13.741129406666667
+    },
+    "(13.9, 50)": {
+        "count": 17,
+        "avg_inclination": 50.00651176470588,
+        "avg_mean_motion": 13.885529729411765
+    },
+    "(14.6, 50)": {
+        "count": 1,
+        "avg_inclination": 49.9928,
+        "avg_mean_motion": 14.57945223
+    },
+    "(13.3, 87)": {
+        "count": 1,
+        "avg_inclination": 86.5127,
+        "avg_mean_motion": 13.29534327
+    },
+    "(14.8, 50)": {
+        "count": 1,
+        "avg_inclination": 49.9847,
+        "avg_mean_motion": 14.84566022
+    },
+    "(13.7, 86)": {
+        "count": 5,
+        "avg_inclination": 86.49618000000001,
+        "avg_mean_motion": 13.690123844000002
+    },
+    "(14.9, 35)": {
+        "count": 2,
+        "avg_inclination": 34.9945,
+        "avg_mean_motion": 14.9332558
+    }
+}
