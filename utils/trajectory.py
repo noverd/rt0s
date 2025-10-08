@@ -1,132 +1,87 @@
 import math
 import numpy as np
-from datetime import timedelta
-from skyfield.api import load
+from datetime import timedelta, timezone, datetime
+from skyfield.api import load, EarthSatellite
 from skyfield.toposlib import wgs84
 
-# Загрузка таймскейла Skyfield, глобальный объект для производительности
 ts = load.timescale()
-
 R_EARTH_KM = 6371.0
-
-def get_point_at_distance(lat1, lon1, distance_km, bearing_deg):
-    """
-    Рассчитывает координаты точки, находящейся на заданном расстоянии и азимуте от исходной точки.
-
-    :param lat1: Широта исходной точки в градусах.
-    :param lon1: Долгота исходной точки в градусах.
-    :param distance_km: Расстояние в километрах.
-    :param bearing_deg: Азимут в градусах (0=Север, 90=Восток).
-    :return: Кортеж (широта, долгота) новой точки в градусах.
-    """
-    lat1_rad = math.radians(lat1)
-    lon1_rad = math.radians(lon1)
-    bearing_rad = math.radians(bearing_deg)
-
-    lat2_rad = math.asin(
-        math.sin(lat1_rad) * math.cos(distance_km / R_EARTH_KM)
-        + math.cos(lat1_rad) * math.sin(distance_km / R_EARTH_KM) * math.cos(bearing_rad)
-    )
-
-    lon2_rad = lon1_rad + math.atan2(
-        math.sin(bearing_rad) * math.sin(distance_km / R_EARTH_KM) * math.cos(lat1_rad),
-        math.cos(distance_km / R_EARTH_KM) - math.sin(lat1_rad) * math.sin(lat2_rad),
-    )
-
-    return math.degrees(lat2_rad), math.degrees(lon2_rad)
+MU_KM3_PER_S2 = 398600.4418  # Гравитационный параметр Земли
 
 
 def generate_simplified_trajectory(
-    launch_lat,
-    launch_lon,
-    target_altitude_km,
-    ascent_time_s,
-    inclination_deg,
-    launch_date,
+        launch_lat,
+        launch_lon,
+        target_altitude_km,
+        inclination_deg,
 ):
     """
-    Генерирует упрощенную траекторию в виде векторов состояния (положение и скорость).
-
-    Сначала генерируется путь в географических координатах, затем он преобразуется
-    в геоцентрические инерциальные векторы (GCRS) для каждого временного шага.
-    Скорость вычисляется как разница векторов положения между шагами.
-
-    Возвращает:
-        Список словарей, где каждый словарь представляет точку траектории с ключами
-        'time_obj', 'position' (np.ndarray) и 'velocity' (np.ndarray).
+    Генерирует эталонную траекторию запуска для определения ее геометрии.
+    Использует фиксированную дату, так как нам важен путь, а не точное время.
     """
     time_step_s = 10
-    launch_azimuth_deg = 90.0 if inclination_deg < 90 else 0.0
-    avg_horizontal_speed_km_s = 4.0
-    total_downrange_distance_km = avg_horizontal_speed_km_s * ascent_time_s
+    max_flight_time_s = 1500
+    launch_date = datetime.now(timezone.utc)  # Дата нужна только для расчетов skyfield
 
-    # Шаг 1: Сгенерировать географические точки
-    geo_points = []
-    for time_s in range(0, int(ascent_time_s) + time_step_s, time_step_s):
-        progress = time_s / ascent_time_s if ascent_time_s > 0 else 0
-        progress = min(progress, 1.0)
+    t_launch = ts.from_datetime(launch_date)
+    launch_site = wgs84.latlon(launch_lat, launch_lon, elevation_m=0)
+    launch_site_gcrs = launch_site.at(t_launch)
 
-        current_altitude_km = progress * target_altitude_km
-        current_distance_km = progress * total_downrange_distance_km
-        current_lat, current_lon = get_point_at_distance(
-            launch_lat, launch_lon, current_distance_km, launch_azimuth_deg
-        )
-        geo_points.append(
-            {
-                "time_s": time_s,
-                "lat": current_lat,
-                "lon": current_lon,
-                "alt": current_altitude_km,
-            }
-        )
+    inclination_rad = math.radians(inclination_deg)
+    lat_rad = math.radians(launch_lat)
 
-    # Шаг 2: Преобразовать географические точки в векторы состояния
+    try:
+        cos_azimuth_arg = math.cos(inclination_rad) / math.cos(lat_rad)
+        azimuth_rad = math.acos(np.clip(cos_azimuth_arg, -1.0, 1.0))
+    except ValueError:
+        azimuth_rad = 0.0
+
+    thrust_local = np.array([math.sin(azimuth_rad), math.cos(azimuth_rad), 0.35])
+    thrust_local /= np.linalg.norm(thrust_local)
+
     trajectory = []
-    if len(geo_points) < 2:
-        return [] # Невозможно вычислить скорость для одной точки
 
-    for i in range(len(geo_points) - 1):
-        p1_geo = geo_points[i]
-        p2_geo = geo_points[i+1]
+    current_pos_gcrs = launch_site_gcrs.position.km
+    current_vel_gcrs = launch_site_gcrs.velocity.km_per_s
 
-        time1 = launch_date + timedelta(seconds=p1_geo["time_s"])
-        time2 = launch_date + timedelta(seconds=p2_geo["time_s"])
+    target_orbital_radius = R_EARTH_KM + target_altitude_km
+    target_orbital_speed = math.sqrt(MU_KM3_PER_S2 / target_orbital_radius)
 
-        # Преобразование в объекты времени Skyfield
-        t1_sky = ts.from_datetime(time1)
-        t2_sky = ts.from_datetime(time2)
+    estimated_ascent_time = 600
+    required_delta_v = target_orbital_speed - np.linalg.norm(current_vel_gcrs)
+    thrust_acceleration_scalar = (required_delta_v / estimated_ascent_time) * 1.8
 
-        # Создание геопозиций Skyfield
-        pos1_wgs84 = wgs84.latlon(p1_geo["lat"], p1_geo["lon"], elevation_m=p1_geo["alt"] * 1000)
-        pos2_wgs84 = wgs84.latlon(p2_geo["lat"], p2_geo["lon"], elevation_m=p2_geo["alt"] * 1000)
+    time_s = 0
+    current_altitude = 0
+    current_speed = 0
 
-        # Получение векторов положения в GCRS
-        pos1_vec = pos1_wgs84.at(t1_sky).position.km
-        pos2_vec = pos2_wgs84.at(t2_sky).position.km
+    while not (
+            current_altitude >= target_altitude_km and current_speed >= target_orbital_speed) and time_s < max_flight_time_s:
+        dist_from_center = np.linalg.norm(current_pos_gcrs)
+        current_altitude = dist_from_center - R_EARTH_KM
+        current_speed = np.linalg.norm(current_vel_gcrs)
 
-        # Вычисление вектора скорости
-        velocity_vec = (pos2_vec - pos1_vec) / time_step_s
+        z_axis_gcrs = np.array([0, 0, 1])
+        up_vec = current_pos_gcrs / dist_from_center
+        east_vec = np.cross(z_axis_gcrs, up_vec)
+        east_vec /= np.linalg.norm(east_vec)
+        north_vec = np.cross(up_vec, east_vec)
+        local_to_gcrs_matrix = np.column_stack((east_vec, north_vec, up_vec))
+        thrust_vector_gcrs = local_to_gcrs_matrix @ thrust_local
 
-        trajectory.append(
-            {"time_obj": time1, "position": pos1_vec, "velocity": velocity_vec}
-        )
+        gravity_accel_scalar = -MU_KM3_PER_S2 / (dist_from_center ** 2)
+        gravity_vector = up_vec * gravity_accel_scalar
 
-    # Добавляем последнюю точку, используя скорость предпоследнего сегмента
-    if trajectory:
-        last_geo_point = geo_points[-1]
-        last_time = launch_date + timedelta(seconds=last_geo_point["time_s"])
-        last_sky_time = ts.from_datetime(last_time)
-        last_pos_wgs84 = wgs84.latlon(
-            last_geo_point['lat'], last_geo_point['lon'], elevation_m=last_geo_point['alt'] * 1000
-        )
-        last_pos_vec = last_pos_wgs84.at(last_sky_time).position.km
+        thrust_acceleration_vector = thrust_vector_gcrs * thrust_acceleration_scalar
+        total_acceleration_vector = thrust_acceleration_vector + gravity_vector
 
-        trajectory.append(
-            {
-                "time_obj": last_time,
-                "position": last_pos_vec,
-                "velocity": trajectory[-1]['velocity'] # Используем предыдущую скорость
-            }
-        )
+        current_vel_gcrs += total_acceleration_vector * time_step_s
+        current_pos_gcrs += current_vel_gcrs * time_step_s
+
+        trajectory.append({
+            "position": current_pos_gcrs.copy(),
+            "velocity": current_vel_gcrs.copy()
+        })
+        time_s += time_step_s
 
     return trajectory

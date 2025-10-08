@@ -1,4 +1,7 @@
 import math
+import logging  # Добавили импорт
+
+logger = logging.getLogger(__name__)  # Создали логгер
 
 # Константы, используемые в формуле
 # Rз (Радиус Земли, км)
@@ -39,14 +42,14 @@ def assign_risk_class(collision_probability: float) -> str:
 
 
 def calculate_collision_financial_risk(
-    N_objects: float,
-    H_upper: float,
-    H_lower: float,
-    V_rel: float,
-    A_effective: float,
-    T_years: float,
-    C_full: float,
-    D_lost: float,
+        N_objects: float,
+        H_upper: float,
+        H_lower: float,
+        V_rel: float,
+        A_effective: float,
+        T_years: float,
+        C_full: float,
+        D_lost: float,
 ) -> dict:
     """
     Рассчитывает ожидаемый финансовый риск (ФР) из-за столкновения
@@ -54,7 +57,7 @@ def calculate_collision_financial_risk(
     """
     R_upper = R_EARTH_KM + H_upper
     R_lower = R_EARTH_KM + H_lower
-    V_shell = (4 / 3) * math.pi * (R_upper**3 - R_lower**3)
+    V_shell = (4 / 3) * math.pi * (R_upper ** 3 - R_lower ** 3)
 
     if V_shell <= 0:
         return {"error": "Invalid altitude range, shell volume is zero or negative."}
@@ -69,7 +72,6 @@ def calculate_collision_financial_risk(
     total_cost_at_risk = C_full + D_lost
     financial_risk = P_collision * total_cost_at_risk
 
-    # --- НОВЫЕ РАСЧЕТЫ ---
     insurance_premium = financial_risk * INSURANCE_COEFFICIENT
     risk_class = assign_risk_class(P_collision)
 
@@ -84,40 +86,51 @@ def calculate_collision_financial_risk(
 
 
 def calculate_launch_collision_risk(
-    N_conjunctions: int,
-    launch_cylinder_radius_m: int,
-    A_rocket: float,
-    C_total_loss: float,
+        N_conjunctions: int,
+        launch_cylinder_radius_m: float,  # Изменен тип на float для точности
+        A_rocket: float,
+        C_total_loss: float,
 ) -> dict:
     """
     Рассчитывает ожидаемый финансовый риск из-за столкновения
     на основе прямого подсчета опасных сближений (конъюнкций).
     """
+    logger.info("--- Начало расчета финансового риска запуска ---")
+    logger.info(f"Получено сближений (N_conjunctions): {N_conjunctions}")
+    logger.info(f"Радиус коридора (launch_cylinder_radius_m): {launch_cylinder_radius_m} м")
+    logger.info(f"Площадь ракеты (A_rocket): {A_rocket} м^2")
+    logger.info(f"Суммарные потери (C_total_loss): {C_total_loss}")
+
     if launch_cylinder_radius_m <= 0:
+        logger.error("Ошибка: радиус коридора равен нулю или отрицательный.")
         return {"error": "Launch corridor radius must be positive."}
 
-    # Вероятность столкновения для одного объекта, проходящего через коридор
     A_rocket_m2 = A_rocket
-    corridor_cross_section_m2 = math.pi * (launch_cylinder_radius_m**2)
+    corridor_cross_section_m2 = math.pi * (launch_cylinder_radius_m ** 2)
+    logger.info(f"Площадь сечения коридора: {corridor_cross_section_m2:.2f} м^2")
 
-    # Чтобы избежать деления на ноль
     if corridor_cross_section_m2 == 0:
         p_one_conjunction = 1.0 if N_conjunctions > 0 else 0.0
     else:
         p_one_conjunction = A_rocket_m2 / corridor_cross_section_m2
 
-    # Защита от физически невозможных сценариев
-    p_one_conjunction = min(p_one_conjunction, 1.0)
+    logger.info(f"Вероятность столкновения при 1 сближении (p_one_conjunction): {p_one_conjunction:.15f}")
 
-    # Общая вероятность столкновения: P_total = 1 - (1 - p_one)^N
-    P_collision = 1.0 - (1.0 - p_one_conjunction)**N_conjunctions
+    P_collision = 1.0 - (1.0 - p_one_conjunction) ** N_conjunctions
+    logger.info(f"Общая вероятность столкновения (P_collision): {P_collision:.15f}")
 
     financial_risk = P_collision * C_total_loss
+    logger.info(f"Финансовый риск (до округления): {financial_risk:.15f}")
+
     insurance_premium = financial_risk * INSURANCE_COEFFICIENT
     risk_class = assign_risk_class(P_collision)
 
+    final_risk = round(financial_risk, 2)
+    logger.info(f"Финансовый риск (ПОСЛЕ округления до 2 знаков): {final_risk}")
+    logger.info("--- Конец расчета ---")
+
     return {
-        "financial_risk": round(financial_risk, 2),
+        "financial_risk": final_risk,
         "collision_risk": P_collision,
         "insurance_premium": round(insurance_premium, 2),
         "risk_class": risk_class,
@@ -126,4 +139,3 @@ def calculate_launch_collision_risk(
         ),
         "object_count": N_conjunctions,
     }
-

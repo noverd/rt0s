@@ -12,7 +12,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/suncalc@1.8.0/suncalc.js"></script>
+
+
     <style>
         /* CSS Variables */
         :root {
@@ -22,7 +24,7 @@
             --accent-color: #A020F0; /* Purple Accent */
             --panel-bg: rgba(45, 30, 70, 0.6);
             --border-color: rgba(230, 224, 255, 0.1);
-            
+
             --risk-low: #00F5D4;
             --risk-med: #FFD700;
             --risk-high: #A020F0; /* Purple for high risk */
@@ -49,7 +51,7 @@
             flex-direction: column;
             background-color: transparent;
         }
-        
+
         .ui-container {
             position: absolute;
             top: 0;
@@ -61,11 +63,11 @@
             z-index: 10;
             pointer-events: none;
         }
-        
+
         .panel, header, #sound-toggle, #update-button {
             pointer-events: auto;
         }
-        
+
         #globe-container {
             position: absolute;
             top: 0;
@@ -74,14 +76,14 @@
             height: 100%;
             z-index: 1;
         }
-        
+
         /* Header & Typography */
         header {
             text-align: center;
             padding: 1.5rem 1rem 1rem 1rem;
             flex-shrink: 0;
         }
-        
+
         header h1 {
             margin: 0;
             font-size: 2.2rem;
@@ -97,7 +99,7 @@
             color: var(--text-secondary);
             height: 1.2em;
         }
-        
+
         .typing-cursor {
             display: inline-block;
             width: 8px;
@@ -110,7 +112,7 @@
         @keyframes blink {
             50% { opacity: 0; }
         }
-        
+
         h2 {
             font-size: 1.25rem;
             font-weight: 700;
@@ -118,7 +120,7 @@
             margin: 0;
             text-shadow: 0 0 8px var(--accent-color);
         }
-        
+
         /* Panels Layout */
         .main-container {
             display: flex;
@@ -155,7 +157,7 @@
             border: 1px solid transparent;
             box-shadow: 0 0 25px rgba(160, 32, 240, 0.2), inset 0 0 10px rgba(45, 30, 70, 0.5);
         }
-        
+
         .panel-header {
             display: flex;
             justify-content: space-between;
@@ -163,7 +165,7 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         /* Left Panel: Inputs */
         .input-form-content {
             flex-grow: 1;
@@ -177,14 +179,14 @@
         .input-form-content::-webkit-scrollbar {
             display: none; /* Safari and Chrome */
         }
-        
+
         .input-field .label-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.5rem;
         }
-        
+
         .input-field label {
             font-size: 0.875rem;
             font-weight: 500;
@@ -192,7 +194,7 @@
             display: flex;
             align-items: center;
         }
-        
+
         .input-field .value-display {
             padding: 0.25rem 0.5rem;
             font-size: 0.75rem;
@@ -200,7 +202,7 @@
             border-radius: 0.25rem;
             color: white;
         }
-        
+
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
@@ -210,7 +212,7 @@
             outline: none;
             cursor: pointer;
         }
-        
+
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 1rem;
@@ -244,7 +246,7 @@
             background-position: right 0.7em top 50%;
             background-size: 0.65em auto;
         }
-        
+
         /* Right Panel: Results */
         .results-content {
             flex-grow: 1;
@@ -276,8 +278,8 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .risk-breakdown, .loss-breakdown {
+
+        .risk-breakdown {
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -285,33 +287,33 @@
             margin-top: 1rem;
         }
 
-        .risk-item, .loss-item {
-            display: flex;
-            justify-content: space-between;
+        .risk-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto auto;
             align-items: center;
             background-color: rgba(0,0,0,0.2);
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             border-radius: 0.5rem;
+            gap: 0.25rem 1rem;
         }
 
         .risk-item-label {
+            grid-column: 1;
+            grid-row: 1;
             text-align: left;
         }
 
-        .object-count {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-
-        .risk-item h4, .loss-item h4 {
-            margin: 0;
+        .risk-item-label h4 {
+             margin: 0;
             font-size: 0.875rem;
             font-weight: 500;
             color: var(--text-secondary);
         }
-        
+
         .risk-grade-small {
+            grid-column: 2;
+            grid-row: 1 / span 2;
             font-size: 1.5rem;
             font-weight: 700;
             padding: 0.25rem 0.75rem;
@@ -319,35 +321,59 @@
             min-width: 40px;
             text-align: center;
             cursor: help;
+            align-self: center;
+        }
+
+        .risk-details {
+            grid-column: 1;
+            grid-row: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .object-count {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: left;
         }
 
         .loss-value {
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 700;
             color: var(--text-primary);
+            text-align: right;
         }
 
-        #total-loss-value { 
-            font-size: 2.5rem; 
-            font-weight: 700; 
-            color: white; 
-            letter-spacing: -0.025em; 
+        .coming-soon {
+             font-size: 0.8rem;
+            font-style: italic;
+             color: var(--text-secondary);
+        }
+
+        #total-loss-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.025em;
             transition: color 0.5s ease, text-shadow 0.5s ease;
             margin-top: 1rem;
         }
-        
-        #insurance-premium-value { 
+
+        #insurance-premium-value {
             font-size: 1.5rem;
             font-weight: 500;
             color: var(--risk-low);
             margin-top: 1rem;
         }
-        
+
         .grade-A { border: 1px solid var(--risk-low); color: var(--risk-low); }
         .grade-B { border: 1px solid var(--risk-med); color: var(--risk-med); }
         .grade-C { border: 1px solid var(--risk-high); color: var(--risk-high); }
+        .grade-D { border: 1px solid var(--risk-high); color: var(--risk-high); }
+        .grade-E { border: 1px solid var(--risk-crit); color: var(--risk-crit); }
         .grade-F { border: 1px solid var(--risk-crit); color: var(--risk-crit); }
-        
+
         /* Controls & Tooltips */
         #tooltip {
             position: fixed;
@@ -366,13 +392,13 @@
             transition: opacity 0.2s ease;
             pointer-events: none;
         }
-        
+
         .tooltip-icon {
             margin-left: 0.5rem;
             color: var(--text-secondary);
             cursor: help;
         }
-        
+
         .controls-footer {
             display: flex;
             justify-content: space-between;
@@ -432,13 +458,13 @@
             box-shadow: 0 0 25px rgba(160, 32, 240, 0.8);
             transform: translateY(-2px);
         }
-#update-button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-        
+        #update-button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
         #sound-toggle {
             position: absolute;
             top: 1.5rem;
@@ -468,7 +494,7 @@
         #sound-toggle svg { display: none; }
         #sound-toggle.active .sound-on-icon { display: block; }
         #sound-toggle:not(.active) .sound-off-icon { display: block; }
-        
+
         .lang-switcher button {
             background: none;
             border: 1px solid transparent;
@@ -479,7 +505,7 @@
             font-size: 0.8rem;
             transition: all 0.2s ease;
         }
-        
+
         .lang-switcher button.active {
             color: white;
             background-color: var(--accent-color);
@@ -501,29 +527,29 @@
         <div class="main-container">
             <div class="panel left-panel frosted-glass">
                 <div class="panel-header">
-                    <h2 data-lang-key="mission_params">Параметры Миссии</h2>
+                    <h2 data-lang-key="mission_params">Mission Parameters</h2>
                 </div>
                 <div id="input-form" class="input-form-content"></div>
                 <div class="controls-footer">
                     <div class="toggle-switch">
-                        <span data-lang-key="auto_rotate">Авто-вращение</span>
-                        <input type="checkbox" id="auto-rotate-toggle" checked>
-                        <label for="auto-rotate-toggle"></label>
+                        <span data-lang-key="shading">Shading</span>
+                        <input type="checkbox" id="shading-toggle" checked>
+                        <label for="shading-toggle"></label>
                     </div>
-                    <button id="update-button" data-lang-key="update_button">Рассчитать</button>
+                    <button id="update-button" data-lang-key="update_button">Calculate</button>
                 </div>
             </div>
-            
+
             <div class="panel center-panel" style="background: transparent; border: none; box-shadow: none; backdrop-filter: none; pointer-events: none;">
                 <!-- Transparent placeholder -->
             </div>
 
             <div class="panel right-panel frosted-glass">
                 <div class="panel-header">
-                    <h2 data-lang-key="financial_results">Финансовые Результаты</h2>
+                    <h2 data-lang-key="financial_results">Financial Results</h2>
                     <div class="lang-switcher">
-                        <button id="lang-ru" class="active">RU</button>
-                        <button id="lang-en">EN</button>
+                        <button id="lang-ru">RU</button>
+                        <button id="lang-en" class="active">EN</button>
                     </div>
                 </div>
                 <div class="results-content">
@@ -531,48 +557,68 @@
                     <div class="risk-breakdown">
                         <div class="risk-item">
                             <div class="risk-item-label">
-                                <h4 data-lang-key="launch_risk">Риск при запуске</h4>
+                                <h4 data-lang-key="launch_risk">Launch Risk</h4>
+                            </div>
+                            <div class="risk-details">
                                 <div id="launch-object-count" class="object-count"></div>
+                                <span id="launch-loss-value" class="loss-value">$0</span>
                             </div>
                             <div id="launch-risk-grade" class="risk-grade-small" data-tooltip-key="tooltip_launch_risk">B</div>
                         </div>
+
                         <div class="risk-item">
-                            <div class="risk-item-label">
-                                <h4 data-lang-key="orbital_risk">Риск на орбите</h4>
-                                <div id="orbital-object-count" class="object-count"></div>
+                             <div class="risk-item-label">
+                                <h4 data-lang-key="orbital_risk">Orbital Risk</h4>
+                            </div>
+                             <div class="risk-details">
+                                 <div id="orbital-object-count" class="object-count"></div>
+                                <span id="orbital-loss-value" class="loss-value">$0</span>
                             </div>
                             <div id="orbital-risk-grade" class="risk-grade-small" data-tooltip-key="tooltip_orbital_risk">C+</div>
                         </div>
+
                         <div class="risk-item">
                              <div class="risk-item-label">
-                                <h4 data-lang-key="reentry_risk">Риск при возвращении</h4>
-                                 <div id="reentry-object-count" class="object-count"></div>
+                                <h4 data-lang-key="reentry_risk">Re-entry Risk</h4>
                             </div>
-                            <div id="reentry-risk-grade" class="risk-grade-small" data-tooltip-key="tooltip_reentry_risk">A-</div>
+                             <div class="risk-details">
+                                 <div class="object-count"></div>
+                                <span class="loss-value coming-soon" data-lang-key="coming_soon">Coming Soon</span>
+                            </div>
+                            <div class="risk-grade-small" >?</div>
+                        </div>
+
+                         <div class="risk-item">
+                             <div class="risk-item-label">
+                                <h4 data-lang-key="decommissioning_risk">Decommissioning Risk</h4>
+                            </div>
+                             <div class="risk-details">
+                                 <div class="object-count"></div>
+                                <span class="loss-value coming-soon" data-lang-key="coming_soon">Coming Soon</span>
+                            </div>
+                            <div class="risk-grade-small" >?</div>
+                        </div>
+
+                         <div class="risk-item">
+                             <div class="risk-item-label">
+                                <h4 data-lang-key="third_party_risk">Third-Party Liability</h4>
+                            </div>
+                             <div class="risk-details">
+                                 <div class="object-count"></div>
+                                <span class="loss-value coming-soon" data-lang-key="coming_soon">Coming Soon</span>
+                            </div>
+                            <div class="risk-grade-small">?</div>
                         </div>
                     </div>
-                    
-                    <div class="loss-section">
-                        <div class="loss-breakdown">
-                             <div class="loss-item">
-                                <h4 data-lang-key="launch_loss">Запуск</h4>
-                                <span id="launch-loss-value" class="loss-value">$0</span>
-                            </div>
-                            <div class="loss-item">
-                                <h4 data-lang-key="orbital_loss">На орбите</h4>
-                                <span id="orbital-loss-value" class="loss-value">$0</span>
-                            </div>
-                            <div class="loss-item">
-                                <h4 data-lang-key="reentry_loss">Возвращение</h4>
-                                <span id="reentry-loss-value" class="loss-value">$0</span>
-                            </div>
-                        </div>
-                         <h3 data-lang-key="expected_loss">Общий Ожидаемый Ущерб</h3>
+
+
+                    <div class="total-loss-section">
+                         <h3 data-lang-key="expected_loss">Total Expected Loss</h3>
                         <p id="total-loss-value">$ 0</p>
                     </div>
-                    
+
                     <div>
-                        <h3 data-lang-key="insurance_premium">Оценочная Страховая Премия</h3>
+                        <h3 data-lang-key="insurance_premium">Estimated Insurance Premium</h3>
                         <p id="insurance-premium-value">$0</p>
                     </div>
                 </div>
@@ -590,43 +636,96 @@
         </svg>
     </button>
 
+    <!-- Vertex Shader -->
+    <script type="x-shader/x-vertex" id="vertexShader">
+        varying vec2 vUv;
+        varying vec3 vWorldNormal;
+        varying vec3 vWorldPosition;
+
+        void main() {
+            vUv = uv;
+            vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+            vWorldPosition = worldPosition.xyz;
+            vWorldNormal = normalize(mat3(modelMatrix) * normal);
+            gl_Position = projectionMatrix * viewMatrix * worldPosition;
+        }
+    </script>
+
+    <!-- Fragment Shader (Final Corrected Version) -->
+    <script type="x-shader/x-fragment" id="fragmentShader">
+        uniform sampler2D dayTexture;
+        uniform sampler2D nightTexture;
+        uniform vec3 sunDirection;
+        uniform bool u_shadingEnabled;
+
+        varying vec2 vUv;
+        varying vec3 vWorldNormal;
+        varying vec3 vWorldPosition;
+
+        void main() {
+            // 1. Base colors
+            vec3 dayColor = texture2D(dayTexture, vUv).rgb;
+            vec3 nightLightsColor = texture2D(nightTexture, vUv).rgb;
+
+            // 2. Lighting intensity
+            float lightIntensity = u_shadingEnabled ? max(dot(vWorldNormal, sunDirection), 0.0) : 1.0;
+
+            // 3. Lit day side color (diffuse + a bit of ambient)
+            vec3 litSurface = dayColor * (lightIntensity + 0.05);
+
+            // 4. Emissive night lights, visible only on the dark side
+            float nightMask = u_shadingEnabled ? smoothstep(0.1, 0.0, lightIntensity) : 0.0;
+            vec3 emissiveLights = nightLightsColor * nightMask;
+
+            // 5. Combine: Base lit color + emissive lights
+            vec3 finalColor = litSurface + emissiveLights;
+
+            // 6. Atmospheric Glow
+            vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
+            float atmosphereFactor = 1.0 - max(dot(vWorldNormal, viewDirection), 0.0);
+            atmosphereFactor = pow(atmosphereFactor, 4.0);
+            vec3 atmosphereColor = vec3(0.3, 0.6, 1.0) * atmosphereFactor * 1.5;
+
+            gl_FragColor = vec4(finalColor + atmosphereColor, 1.0);
+        }
+    </script>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            
+
             let updateTimer = null;
             let typewriterTimer = null;
 
             const appState = {
-                params: { 
-                    altitude: 700, 
-                    inclination: 98, 
+                params: {
+                    altitude: 700,
+                    inclination: 98,
                     lan: 45,
-                    cross_section: 10, 
-                    lifespan: 10, 
-                    cost: 250, 
+                    cross_section: 10,
+                    lifespan: 10,
+                    cost: 250,
                     revenue_loss: 50,
                     launch_site: 0, // Индекс выбранного космодрома
-                    flight_time: 540, // Время полета в секундах
                 },
                 results: {
                     launch: { grade: 'B', gradeClass: 'grade-B', description: '', object_count: 0 },
                     orbital: { grade: 'C+', gradeClass: 'grade-C', description: '', object_count: 0 },
-                    reentry: { grade: 'A-', gradeClass: 'grade-A', description: 'Низкий риск, типично для невозвращаемых аппаратов.', object_count: 0 },
-                    financialLoss: { total: 0, launch: 0, orbital: 0, reentry: 0 },
+                    financialLoss: { total: 0, launch: 0, orbital: 0 },
                     insurancePremium: 0,
                 },
-                lang: 'ru',
-                isAutoRotating: true,
+                lang: 'en',
                 isSoundEnabled: false,
+                isShadingEnabled: true,
             };
-            
+
             // --- SOUND SETUP ---
             const sounds = {
                 uiSynth: null,
                 ambientPad: null,
                 isInit: false,
             };
-            
+
             const throttledSliderSound = throttle((freq) => {
                 if(appState.isSoundEnabled && sounds.uiSynth) {
                     sounds.uiSynth.triggerAttackRelease(freq, '16n', Tone.now());
@@ -640,7 +739,7 @@
                         oscillator: { type: 'sine' },
                         envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.2 },
                     }).toDestination();
-                    
+
                     sounds.ambientPad = new Tone.NoiseSynth({
                         noise: { type: 'brown' },
                         envelope: { attack: 5, decay: 0.1, sustain: 1, release: 5 },
@@ -656,7 +755,7 @@
                     console.error("Audio could not be started by browser:", e);
                 });
             }
-            
+
             const translations = {
                 en: {
                     title: "Orbiteer RMS",
@@ -690,13 +789,14 @@
                     launch_risk: "Launch Risk",
                     orbital_risk: "Orbital Risk",
                     reentry_risk: "Re-entry Risk",
-                    launch_loss: "Launch",
-                    orbital_loss: "On-Orbit",
-                    reentry_loss: "Re-entry",
+                    decommissioning_risk: "Decommissioning Risk",
+                    third_party_risk: "Third-Party Liability",
                     expected_loss: "Total Expected Loss",
                     insurance_premium: "Estimated Insurance Premium",
                     update_button: "Calculate",
-                    auto_rotate: "Auto-rotate",
+                    coming_soon: "Coming Soon",
+                    objects: "Objects",
+                    shading: "Shading",
                 },
                 ru: {
                     title: "Orbiteer RMS",
@@ -731,16 +831,17 @@
                     launch_risk: "Риск при запуске",
                     orbital_risk: "Риск на орбите",
                     reentry_risk: "Риск при возвращении",
-                    launch_loss: "Запуск",
-                    orbital_loss: "На орбите",
-                    reentry_loss: "Возвращение",
+                    decommissioning_risk: "Риск вывода из эксплуатации",
+                    third_party_risk: "Ответственность перед третьими лицами",
                     expected_loss: "Общий Ожидаемый Ущерб",
                     insurance_premium: "Оценочная Страховая Премия",
                     update_button: "Рассчитать",
-                    auto_rotate: "Авто-вращение",
+                    coming_soon: "Скоро",
+                    objects: "Объектов",
+                    shading: "Затенение",
                 }
             };
-            
+
             const fieldsConfig = [
                 { type: 'select', id: 'launch_site', langKey: 'launch_site', tooltipKey: 'tooltip_launch_site' },
                 { type: 'range', id: 'altitude', langKey: 'altitude', min: 300, max: 2000, unitKey: 'unit_km', tooltipKey: 'tooltip_altitude' },
@@ -748,24 +849,25 @@
                 { type: 'range', id: 'lan', langKey: 'lan', min: 0, max: 360, unitKey: 'unit_deg', tooltipKey: 'tooltip_lan' },
                 { type: 'range', id: 'cross_section', langKey: 'cross_section', min: 1, max: 100, unitKey: 'unit_m2', tooltipKey: 'tooltip_cross_section' },
                 { type: 'range', id: 'lifespan', langKey: 'lifespan', min: 1, max: 25, unitKey: 'unit_years', tooltipKey: 'tooltip_lifespan' },
-                { type: 'range', id: 'flight_time', langKey: 'flight_time', min: 300, max: 1200, step: 10, unitKey: 'unit_seconds', tooltipKey: 'tooltip_flight_time' },
                 { type: 'range', id: 'cost', langKey: 'cost', min: 1, max: 1000, unitKey: 'unit_m_usd', tooltipKey: 'tooltip_cost' },
                 { type: 'range', id: 'revenue_loss', langKey: 'revenue_loss', min: 0, max: 100, unitKey: 'unit_percent', tooltipKey: 'tooltip_revenue_loss' },
             ];
-            
+
             const inputForm = document.getElementById('input-form');
             const tooltipEl = document.getElementById('tooltip');
             const subtitleEl = document.getElementById('subtitle');
             const globeContainer = document.getElementById('globe-container');
-            
-            let scene, camera, renderer, earth, clouds, orbitGroup, controls, launchSiteMarker;
-            const earthScale = 0.8; 
-            
+
+            let scene, camera, renderer, earth, clouds, orbitGroup, controls, launchSiteMarker, earthGroup, sunLight, ambientLight;
+            const earthScale = 0.8;
+
             function animateCameraToTarget(targetPosition) {
                 const startPosition = camera.position.clone();
-                const endPosition = targetPosition.clone().normalize().multiplyScalar(2.5); // Отодвигаемся от цели
-                const duration = 1200; // мс
+                const endPosition = targetPosition.clone().normalize().multiplyScalar(2.5);
+                const duration = 1200;
                 let startTime = null;
+                 controls.autoRotate = false;
+                 controls.enabled = false;
 
                 function animate(currentTime) {
                     if (startTime === null) startTime = currentTime;
@@ -773,25 +875,25 @@
                     const progress = Math.min(elapsedTime / duration, 1);
 
                     camera.position.lerpVectors(startPosition, endPosition, progress);
-                    camera.lookAt(0, 0, 0); // Всегда смотрим на центр Земли
+                    camera.lookAt(0, 0, 0);
 
                     if (progress < 1) {
                         requestAnimationFrame(animate);
                     } else {
-                         appState.isAutoRotating = true; // Возобновляем авто-вращение
+                         controls.autoRotate = true;
+                         controls.enabled = true;
                     }
                 }
-                appState.isAutoRotating = false; // Приостанавливаем авто-вращение на время анимации
                 requestAnimationFrame(animate);
             }
 
             function updateLaunchSiteMarker(lat, lon) {
                 if (launchSiteMarker) {
-                    scene.remove(launchSiteMarker);
+                    if(launchSiteMarker.parent) launchSiteMarker.parent.remove(launchSiteMarker);
                 }
 
-                // Создаем геометрию ракеты
-                const rocketGroup = new THREE.Group();
+                const markerGroup = new THREE.Group();
+
                 const bodyGeometry = new THREE.CylinderGeometry(0.005, 0.007, 0.05, 8);
                 const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0xcccccc });
                 const rocketBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
@@ -799,21 +901,23 @@
                 const noseGeometry = new THREE.ConeGeometry(0.005, 0.02, 8);
                 const noseMaterial = new THREE.MeshPhongMaterial({ color: 0xff4500 });
                 const rocketNose = new THREE.Mesh(noseGeometry, noseMaterial);
-                rocketNose.position.y = 0.035; // Размещаем нос на вершине корпуса
+                rocketNose.position.y = 0.035;
 
-                rocketGroup.add(rocketBody);
-                rocketGroup.add(rocketNose);
+                markerGroup.add(rocketBody);
+                markerGroup.add(rocketNose);
 
-                launchSiteMarker = rocketGroup;
+                const ringGeometry = new THREE.RingGeometry(0.04, 0.05, 32);
+                const ringMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0xffff00, emissiveIntensity: 2.0, side: THREE.DoubleSide, toneMapped: false });
+                const selectionRing = new THREE.Mesh(ringGeometry, ringMaterial);
+                selectionRing.rotation.x = -Math.PI / 2;
+                selectionRing.position.y = -0.025;
+                markerGroup.add(selectionRing);
 
-                // Размещаем и ориентируем ракету
+                launchSiteMarker = markerGroup;
+
                 const positionVec = new THREE.Vector3();
-
-                // Преобразуем широту и долготу в сферические координаты Three.js
-                // phi - полярный угол (отклонение от полюса), 90 - широта.
                 const phi = THREE.MathUtils.degToRad(90 - lat);
-                // theta - азимутальный угол. Для стандартной текстуры Земли требуется сдвиг +90 градусов.
-                const theta = THREE.MathUtils.degToRad(lon + 90);
+                const theta = THREE.MathUtils.degToRad(lon);
 
                 positionVec.setFromSphericalCoords(earthScale * 1.005, phi, theta);
                 launchSiteMarker.position.copy(positionVec);
@@ -822,25 +926,26 @@
                 const axis = new THREE.Vector3().copy(positionVec).normalize();
                 launchSiteMarker.quaternion.setFromUnitVectors(up, axis);
 
-                scene.add(launchSiteMarker);
+                // Add marker to the main earth group, not the rotating mesh
+                earthGroup.add(launchSiteMarker);
             }
 
             function hideTooltip() {
                 tooltipEl.style.visibility = 'hidden';
                 tooltipEl.style.opacity = 0;
             }
-            
+
             function setLanguage(lang) {
                 hideTooltip();
                 appState.lang = lang;
-                
+
                 document.querySelectorAll('[data-lang-key]').forEach(el => {
                     const key = el.getAttribute('data-lang-key');
                     if (translations[lang] && translations[lang][key]) {
                         el.textContent = translations[lang][key];
                     }
                 });
-                
+
                 document.querySelectorAll('.value-display').forEach(el => {
                     const id = el.id.replace('value-', '');
                     const field = fieldsConfig.find(f => f.id === id);
@@ -850,13 +955,28 @@
                 });
 
                 typewriterEffect(subtitleEl, translations[lang].subtitle);
-                
+
                 document.getElementById('lang-ru').classList.toggle('active', lang === 'ru');
                 document.getElementById('lang-en').classList.toggle('active', lang === 'en');
                 if(appState.isSoundEnabled && sounds.uiSynth) sounds.uiSynth.triggerAttackRelease('A4', '8n');
                 updateApp(false);
             }
-            
+
+            function getSunPosition() {
+                const now = new Date();
+                const sunPosition = SunCalc.getPosition(now, 0, 0); // lat/lon don't matter for direction vector
+                const subsolarLat = THREE.MathUtils.radToDeg(sunPosition.altitude);
+                const subsolarLon = -THREE.MathUtils.radToDeg(sunPosition.azimuth) - 90; // Adjust azimuth to longitude
+
+                const phi = THREE.MathUtils.degToRad(90 - subsolarLat);
+                const theta = THREE.MathUtils.degToRad(subsolarLon);
+
+                const sunDirection = new THREE.Vector3();
+                sunDirection.setFromSphericalCoords(1, phi, theta);
+                return sunDirection;
+            }
+
+
             function initGlobe() {
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -864,60 +984,80 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setClearColor(0x000000, 0);
                 globeContainer.appendChild(renderer.domElement);
-                
+
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
                 controls.enableDamping = true;
                 controls.dampingFactor = 0.05;
                 controls.enableZoom = false;
                 controls.enablePan = false;
-                
-                controls.addEventListener('start', () => { appState.isAutoRotating = false; });
+                controls.autoRotate = false;
+
 
                 const textureLoader = new THREE.TextureLoader();
                 scene.background = textureLoader.load('https://threejs.org/examples/textures/milkyway.jpg');
 
-                const earthMaterial = new THREE.MeshPhongMaterial({
-                    map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg'),
-                    specularMap: textureLoader.load('https://threejs.org/examples/textures/planets/earth_specular_2048.jpg'),
-                    specular: new THREE.Color('grey'),
+                earthGroup = new THREE.Group();
+                earthGroup.rotation.z = THREE.MathUtils.degToRad(23.5);
+                scene.add(earthGroup);
+
+                // Add subtle ambient light to softly light the dark side
+                ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+                scene.add(ambientLight);
+
+                // Add the main directional light for the sun
+                sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
+                scene.add(sunLight);
+
+                const earthMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        dayTexture: { value: textureLoader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg') },
+                        nightTexture: { value: textureLoader.load('https://raw.githubusercontent.com/jeromeetienne/threex.planets/master/images/earthnight.jpg') },
+                        sunDirection: { value: new THREE.Vector3(1, 0, 0) },
+                        u_shadingEnabled: { value: true }
+                    },
+                    vertexShader: document.getElementById('vertexShader').textContent,
+                    fragmentShader: document.getElementById('fragmentShader').textContent
                 });
+
                 earth = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), earthMaterial);
                 earth.scale.set(earthScale, earthScale, earthScale);
-                scene.add(earth);
+                earthGroup.add(earth);
 
-                const cloudMaterial = new THREE.MeshStandardMaterial({ map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_clouds_1024.png'), transparent: true });
+                const cloudMaterial = new THREE.MeshPhongMaterial({ map: textureLoader.load('https://threejs.org/examples/textures/planets/earth_clouds_1024.png'), transparent: true, opacity: 0.8 });
                 clouds = new THREE.Mesh(new THREE.SphereGeometry(1.01, 64, 64), cloudMaterial);
                 clouds.scale.set(earthScale, earthScale, earthScale);
-                scene.add(clouds);
-                
-                const glowMaterial = new THREE.ShaderMaterial({
-                    uniforms: {},
-                    vertexShader: `varying vec3 vNormal; void main() { vNormal = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-                    fragmentShader: `varying vec3 vNormal; void main() { float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0); gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0) * intensity; }`,
-                    side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true
-                });
-                const glow = new THREE.Mesh(new THREE.SphereGeometry(1.05, 64, 64), glowMaterial);
-                glow.scale.set(earthScale, earthScale, earthScale);
-                scene.add(glow);
+                earthGroup.add(clouds);
 
-                scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-                const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-                dirLight.position.set(5, 3, 5);
-                scene.add(dirLight);
-                
                 orbitGroup = new THREE.Group();
                 scene.add(orbitGroup);
-                
+
                 camera.position.z = 2.5;
-                
-                const animate = () => { 
-                    requestAnimationFrame(animate); 
-                    if (appState.isAutoRotating) {
-                        // earth.rotation.y += 0.0005; // Вращение земли остановлено
+
+                const clock = new THREE.Clock();
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    const delta = clock.getDelta();
+
+                    // Independent rotation for clouds to simulate weather patterns moving
+                    if (clouds) {
+                        clouds.rotation.y += delta * 0.01;
                     }
-                    clouds.rotation.y += 0.0001; // Вращаются только облака
-                    controls.update(); 
-                    renderer.render(scene, camera); 
+
+                    const sunDirection = getSunPosition();
+
+                    // Update the scene's main light to affect other objects like clouds
+                    sunLight.position.copy(sunDirection);
+
+                    // The shader needs the sun direction in the Earth's local coordinate system (tilted)
+                    const earthInverseQuaternion = earthGroup.quaternion.clone().invert();
+                    const localSunDirection = sunDirection.clone().applyQuaternion(earthInverseQuaternion);
+
+                    if (earth && earth.material.uniforms.sunDirection) {
+                        earth.material.uniforms.sunDirection.value = localSunDirection;
+                    }
+
+                    controls.update();
+                    renderer.render(scene, camera);
                 };
                 animate();
                 window.addEventListener('resize', () => {
@@ -933,10 +1073,10 @@
                 let orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-high'));
                 if (gradeClass === 'grade-A') orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-low'));
                 if (gradeClass === 'grade-B') orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-med'));
-                if (gradeClass === 'grade-F') orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-crit'));
+                if (gradeClass === 'grade-D' || gradeClass === 'grade-E' || gradeClass === 'grade-F') orbitColor = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--risk-crit'));
 
                 const orbitRadius = earthScale * (1 + (altitude / 6371) * 0.25);
-                
+
                 const points = [];
                 const numPoints = 128;
                 for (let i = 0; i <= numPoints; i++) {
@@ -946,18 +1086,18 @@
                 const curve = new THREE.CatmullRomCurve3(points);
                 curve.closed = true;
 
-                const tubeGeometry = new THREE.TubeGeometry(curve, 100, 0.012, 8, true); 
-                const tubeMaterial = new THREE.MeshStandardMaterial({ color: orbitColor, emissive: orbitColor, emissiveIntensity: 1.5, side: THREE.DoubleSide, transparent: true, opacity: 0.9 });
+                const tubeGeometry = new THREE.TubeGeometry(curve, 100, 0.012, 8, true);
+                const tubeMaterial = new THREE.MeshStandardMaterial({ color: orbitColor, emissive: orbitColor, emissiveIntensity: 1.5, side: THREE.DoubleSide, transparent: true, opacity: 0.9, toneMapped: false });
                 const orbitTube = new THREE.Mesh(tubeGeometry, tubeMaterial);
-                
+
                 orbitGroup.rotation.set(THREE.MathUtils.degToRad(inclination), THREE.MathUtils.degToRad(lan), 0, 'YXZ');
 
                 orbitGroup.add(orbitTube);
             }
-            
+
             function parseRiskClass(riskData) {
                 if (!riskData || typeof riskData.risk_class !== 'string') {
-                    return { grade: 'N/A', gradeClass: '', description: 'Нет данных', object_count: 0 };
+                    return { grade: 'N/A', gradeClass: '', description: 'No data', object_count: 0 };
                 }
                 const riskClass = riskData.risk_class;
                 const grade = riskClass.charAt(0);
@@ -974,9 +1114,8 @@
             }
 
             async function fetchRiskAssessment(params) {
-                const { altitude, cross_section, lifespan, cost, revenue_loss, launch_site, flight_time } = params;
+                const { altitude, cross_section, lifespan, cost, revenue_loss, launch_site } = params;
 
-                // Параметры для /api/orbit_risk
                 const orbitParams = {
                     height: altitude,
                     A_effective: cross_section,
@@ -987,15 +1126,12 @@
 
                 const selectedSite = appState.launchSites[launch_site];
 
-                // Параметры для /api/takeoff_risk (с динамическими значениями)
                 const takeoffParams = {
                     lat: selectedSite.lat,
                     lon: selectedSite.lon,
-                    date: new Date().toISOString().slice(0, 19),
                     altitude: altitude,
                     inclination: params.inclination,
                     A_rocket: cross_section,
-                    T_seconds: flight_time,
                     C_total_loss: cost * 1000000,
                 };
 
@@ -1003,7 +1139,6 @@
                 const takeoffQuery = new URLSearchParams(takeoffParams).toString();
 
                 try {
-                    // Выполняем оба запроса параллельно
                     const [orbitResponse, takeoffResponse] = await Promise.all([
                         fetch(`/api/orbit_risk?${orbitQuery}`),
                         fetch(`/api/takeoff_risk?${takeoffQuery}`)
@@ -1021,22 +1156,18 @@
 
                     const orbitalRisk = parseRiskClass(orbitData);
                     const launchRisk = parseRiskClass(takeoffData);
-                    const reentryRisk = { grade: 'A', gradeClass: 'grade-A', description: 'Низкий риск, типично для невозвращаемых аппаратов.', object_count: 0 }; // Заглушка
-                    const mockReentryLoss = orbitParams.C_full * 0.005; // Заглушка
 
                     const financialLoss = {
                         launch: Math.round(takeoffData.financial_risk),
                         orbital: Math.round(orbitData.financial_risk),
-                        reentry: Math.round(mockReentryLoss),
                     };
-                    financialLoss.total = financialLoss.launch + financialLoss.orbital + financialLoss.reentry;
+                    financialLoss.total = financialLoss.launch + financialLoss.orbital;
 
                     const totalInsurance = Math.round(takeoffData.insurance_premium + orbitData.insurance_premium);
 
                     return {
                         launch: launchRisk,
                         orbital: orbitalRisk,
-                        reentry: reentryRisk,
                         financialLoss: financialLoss,
                         insurancePremium: totalInsurance,
                     };
@@ -1060,32 +1191,25 @@
                 requestAnimationFrame(animation);
             }
 
-            function updateRiskDisplays(launch, orbital, reentry) {
+            function updateRiskDisplays(launch, orbital) {
                 document.getElementById('launch-risk-grade').textContent = launch.grade;
                 document.getElementById('launch-risk-grade').className = `risk-grade-small ${launch.gradeClass}`;
-                document.getElementById('launch-object-count').textContent = `Объектов: ${launch.object_count}`;
+                document.getElementById('launch-object-count').textContent = `${translations[appState.lang].objects}: ${launch.object_count}`;
+                document.getElementById('launch-loss-value').textContent = `$${appState.results.financialLoss.launch.toLocaleString('en-US')}`;
+
 
                 document.getElementById('orbital-risk-grade').textContent = orbital.grade;
                 document.getElementById('orbital-risk-grade').className = `risk-grade-small ${orbital.gradeClass}`;
-                document.getElementById('orbital-object-count').textContent = `Объектов: ${orbital.object_count}`;
-
-                document.getElementById('reentry-risk-grade').textContent = reentry.grade;
-                document.getElementById('reentry-risk-grade').className = `risk-grade-small ${reentry.gradeClass}`;
-                document.getElementById('reentry-object-count').textContent = `(нет данных)`; // Заглушка
+                document.getElementById('orbital-object-count').textContent = `${translations[appState.lang].objects}: ${orbital.object_count}`;
+                document.getElementById('orbital-loss-value').textContent = `$${appState.results.financialLoss.orbital.toLocaleString('en-US')}`;
             }
 
             function updateFinancialDisplays(financialLoss, insurancePremium, animate = true) {
                  if (animate) {
                     animateCounter(document.getElementById('total-loss-value'), financialLoss.total);
-                    animateCounter(document.getElementById('launch-loss-value'), financialLoss.launch);
-                    animateCounter(document.getElementById('orbital-loss-value'), financialLoss.orbital);
-                    animateCounter(document.getElementById('reentry-loss-value'), financialLoss.reentry);
                     animateCounter(document.getElementById('insurance-premium-value'), insurancePremium);
                 } else {
                     document.getElementById('total-loss-value').textContent = `$${financialLoss.total.toLocaleString('en-US')}`;
-                    document.getElementById('launch-loss-value').textContent = `$${financialLoss.launch.toLocaleString('en-US')}`;
-                    document.getElementById('orbital-loss-value').textContent = `$${financialLoss.orbital.toLocaleString('en-US')}`;
-                    document.getElementById('reentry-loss-value').textContent = `$${financialLoss.reentry.toLocaleString('en-US')}`;
                     document.getElementById('insurance-premium-value').textContent = `$${insurancePremium.toLocaleString('en-US')}`;
                 }
 
@@ -1116,13 +1240,13 @@
                     }
                 }
 
-                const { launch, orbital, reentry, financialLoss, insurancePremium } = appState.results;
-                
-                updateRiskDisplays(launch, orbital, reentry);
+                const { launch, orbital, financialLoss, insurancePremium } = appState.results;
+
+                updateRiskDisplays(launch, orbital);
                 updateFinancialDisplays(financialLoss, insurancePremium, fetchNewData);
                 updateOrbit(appState.params.altitude, appState.params.inclination, appState.params.lan, orbital.gradeClass);
             }
-            
+
             function throttle(func, limit) {
                 let inThrottle;
                 return function() {
@@ -1141,10 +1265,10 @@
                     const response = await fetch('/api/launch_sites');
                     if (!response.ok) throw new Error('Failed to fetch launch sites');
                     const sites = await response.json();
-                    appState.launchSites = sites; // Сохраняем для последующего использования
+                    appState.launchSites = sites;
 
                     const selectEl = document.getElementById('launch_site');
-                    selectEl.innerHTML = ''; // Очищаем
+                    selectEl.innerHTML = '';
                     sites.forEach((site, index) => {
                         const option = document.createElement('option');
                         option.value = index;
@@ -1155,7 +1279,6 @@
                         selectEl.appendChild(option);
                     });
 
-                    // Устанавливаем маркер для точки по умолчанию
                     if (sites.length > 0) {
                         const defaultSite = sites[appState.params.launch_site];
                         updateLaunchSiteMarker(defaultSite.lat, defaultSite.lon);
@@ -1169,7 +1292,7 @@
                 fieldsConfig.forEach(field => {
                     const fieldEl = document.createElement('div');
                     fieldEl.className = 'input-field';
-                    
+
                     let inputHtml;
                     if (field.type === 'select') {
                         inputHtml = `
@@ -1192,21 +1315,23 @@
                             <input type="range" id="${field.id}" min="${field.min}" max="${field.max}" value="${appState.params[field.id]}" step="${field.step || 1}">`;
                     }
                     fieldEl.innerHTML = inputHtml;
-                    
+
                     const input = fieldEl.querySelector('input, select');
                     input.addEventListener('input', (e) => {
                         appState.params[field.id] = parseFloat(e.target.value);
                         if (field.type === 'range') {
                            fieldEl.querySelector(`#value-${field.id}`).textContent = `${appState.params[field.id]} ${translations[appState.lang][field.unitKey]}`;
                         }
-                        
+
                         throttledSliderSound(200 + Math.random() * 100);
 
                         if (field.id === 'launch_site') {
                             const selectedSite = appState.launchSites[e.target.value];
                             if(selectedSite) {
                                 updateLaunchSiteMarker(selectedSite.lat, selectedSite.lon);
-                                animateCameraToTarget(launchSiteMarker.position);
+                                const worldPosition = new THREE.Vector3();
+                                launchSiteMarker.getWorldPosition(worldPosition);
+                                animateCameraToTarget(worldPosition);
                             }
                         } else if (['altitude', 'inclination', 'lan'].includes(field.id)) {
                            updateOrbit(appState.params.altitude, appState.params.inclination, appState.params.lan, appState.results.orbital.gradeClass);
@@ -1215,7 +1340,7 @@
                     inputForm.appendChild(fieldEl);
                 });
             }
-            
+
             function typewriterEffect(element, text, speed = 50) {
                 clearTimeout(typewriterTimer);
                 let i = 0;
@@ -1249,24 +1374,21 @@
                     tooltipText = appState.results.launch.description;
                 } else if (key === 'tooltip_orbital_risk') {
                     tooltipText = appState.results.orbital.description;
-                } else if (key === 'tooltip_reentry_risk') {
-                    tooltipText = appState.results.reentry.description;
                 } else {
                     tooltipText = translations[appState.lang][key];
                 }
 
-                if (!tooltipText) return; // Do not show empty tooltip
+                if (!tooltipText) return;
 
                 tooltipEl.textContent = tooltipText;
                 tooltipEl.style.visibility = 'visible';
                 tooltipEl.style.opacity = 1;
                 const rect = target.getBoundingClientRect();
 
-                // Position tooltip to the left for risk grades
                 if (target.classList.contains('risk-grade-small')) {
                     tooltipEl.style.left = `${rect.left - tooltipEl.offsetWidth - 10}px`;
                     tooltipEl.style.top = `${rect.top + rect.height / 2 - tooltipEl.offsetHeight / 2}px`;
-                } else { // Position to the right for input icons
+                } else {
                     tooltipEl.style.left = `${rect.right + 10}px`;
                     tooltipEl.style.top = `${rect.top + rect.height / 2 - tooltipEl.offsetHeight / 2}px`;
                 }
@@ -1292,18 +1414,26 @@
                 clearTimeout(updateTimer);
                 updateApp();
             });
-            document.getElementById('auto-rotate-toggle').addEventListener('change', e => {
-                if(appState.isSoundEnabled && sounds.uiSynth) sounds.uiSynth.triggerAttackRelease('G4', '8n');
-                appState.isAutoRotating = e.target.checked;
+            document.getElementById('shading-toggle').addEventListener('change', (e) => {
+                appState.isShadingEnabled = e.target.checked;
+                if (earth) {
+                    earth.material.uniforms.u_shadingEnabled.value = appState.isShadingEnabled;
+                }
+                if (appState.isShadingEnabled) {
+                    sunLight.visible = true;
+                    ambientLight.intensity = 0.1;
+                } else {
+                    sunLight.visible = false;
+                    ambientLight.intensity = 1.0;
+                }
             });
-            
+
             initGlobe();
             createInputFields();
             await populateLaunchSites();
-            setLanguage('ru');
+            setLanguage('en');
         });
     </script>
 </body>
 </html>
-
 
